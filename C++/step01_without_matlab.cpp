@@ -19,8 +19,8 @@ namespace plt = matplotlibcpp;
 int main() {
     auto start = high_resolution_clock::now();
     // Simulation parameters
-    const int X = 41;                    // Number of spatial points
-    const int T = 40;                    // Number of time steps
+    const int X = 4100;                    // Number of spatial points
+    const int T = 4000;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
     const double dx = 2.0 / (X - 1);     // Spatial step size
@@ -57,7 +57,7 @@ int main() {
     plt::show();
 #endif
     auto stop = high_resolution_clock::now();
-    auto duration = duration_cast<microseconds>(stop - start);
+    auto duration = duration_cast<seconds>(stop - start);
     std::cout << duration.count() << std::endl;
 
     return 0;
