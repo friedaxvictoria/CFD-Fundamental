@@ -1,10 +1,14 @@
+#ifdef MATPLOTLIB
 #include "matplotlibcpp.h"
+#endif
 #include <cmath>
 #include <vector>
 #include <algorithm>
 #include <iostream>
 
+#ifdef MATPLOTLIB
 namespace plt = matplotlibcpp;
+#endif
 
 ////////////////////////////////////////////////////////////
 // Step 1: 1D Linear Convection
@@ -15,7 +19,7 @@ int main() {
     const int X = 41;                    // Number of spatial points
     const int T = 40;                    // Number of time steps
     const int c = 1;                     // Wave speed
-    
+
     const double dx = 2.0 / (X - 1);     // Spatial step size
     const double dt = 0.025;             // Time step size
 
@@ -27,23 +31,27 @@ int main() {
         u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
     }
 
+#ifdef MATPLOTLIB
     plt::ion();
     plt::Plot plot;
-
+#endif
     // Time-stepping loop
     for (int n = 0; n < T; n++) {
         un = u;
 
         for (int i = 1; i < X; i++) {
-            u[i] = un[i] - c * (un[i] - un[i-1]) * dt / dx;
+            u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
         }
-
+#ifdef MATPLOTLIB
         plot.update(x, u);
         plt::xlim(0, 2);
         plt::ylim(0.5, 2.5);
         plt::pause(0.1);
+#endif
     }
 
+#ifdef MATPLOTLIB
     plt::show();
+#endif
     return 0;
 }
