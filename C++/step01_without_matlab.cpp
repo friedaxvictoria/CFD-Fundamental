@@ -19,8 +19,8 @@ namespace plt = matplotlibcpp;
 int main() {
     auto start = high_resolution_clock::now();
     // Simulation parameters
-    const int X = 4100;                    // Number of spatial points
-    const int T = 4000;                    // Number of time steps
+    const int X = 500000;                    // Number of spatial points
+    const int T = 1000000;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
     const double dx = 2.0 / (X - 1);     // Spatial step size
