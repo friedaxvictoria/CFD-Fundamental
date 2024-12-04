@@ -57,7 +57,7 @@ int main() {
     plt::show();
 #endif
     auto stop = high_resolution_clock::now();
-    auto duration = duration_cast<seconds>(stop - start);
+    auto duration = duration_cast<microseconds>(stop - start);
     std::cout << duration.count() << std::endl;
 
     return 0;
