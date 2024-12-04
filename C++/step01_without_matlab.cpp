@@ -53,5 +53,7 @@ int main() {
 #ifdef MATPLOTLIB
     plt::show();
 #endif
+    std::cout<<"finished";
+
     return 0;
 }
