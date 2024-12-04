@@ -5,6 +5,8 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <chrono>
+using namespace std::chrono;
 
 #ifdef MATPLOTLIB
 namespace plt = matplotlibcpp;
@@ -15,6 +17,7 @@ namespace plt = matplotlibcpp;
 ////////////////////////////////////////////////////////////
 
 int main() {
+    auto start = high_resolution_clock::now();
     // Simulation parameters
     const int X = 41;                    // Number of spatial points
     const int T = 40;                    // Number of time steps
@@ -53,7 +56,9 @@ int main() {
 #ifdef MATPLOTLIB
     plt::show();
 #endif
-    std::cout<<"finished";
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    std::cout << duration.count() << std::endl;
 
     return 0;
 }
