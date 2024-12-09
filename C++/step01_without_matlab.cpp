@@ -66,11 +66,12 @@ int main() {
 
 
 
-    for (int n = 0; n < T; n++) {
-        std::copy(std::begin(un), std::end(un), std::begin(testu));
-        //un = u;
-        for (int i = 1; i < X; i++) {
-            testu[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
+        for (int n = 0; n < T; n++) {
+            std::copy(std::begin(un), std::end(un), std::begin(testu));
+            //un = u;
+            for (int i = 1; i < X; i++) {
+                testu[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
+            }
         }
 
     std::sort(u, u + X);
