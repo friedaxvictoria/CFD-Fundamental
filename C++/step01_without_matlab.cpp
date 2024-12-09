@@ -52,7 +52,8 @@ int main() {
 
     
     for (int n = 0; n < T; n++) {
-        un = u;
+        std::ranges::copy(un, u);
+        //un = u;
 
         #pragma omp parallel for simd shared(u, un)
             for (int i = 1; i < X; i++) {
