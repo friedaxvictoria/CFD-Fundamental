@@ -84,6 +84,9 @@ int main() {
         }
     }
 
+
+    std::sort(u, u + X);
+    std::sort(testu, testu + X);
     for (int i = 0; i < X; i++) {
         std::cout << u[i] << std::endl;
         std::cout << testu[i] << std::endl;
