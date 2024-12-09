@@ -47,15 +47,6 @@ int main() {
 
     std::copy(std::begin(testu), std::end(testu), std::begin(u));
 
-    std::sort(u, u + X);
-    std::sort(testu, testu + X);
-
-    // Linearly compare elements
-    for (int i = 0; i < X; i++)
-        if (u[i] != testu[i])
-            std::cout << "u is unequal" << std::endl;
-
-
 #ifdef MATPLOTLIB
     plt::ion();
     plt::Plot plot;
@@ -85,7 +76,7 @@ int main() {
     }
 
     for (int n = 0; n < T; n++) {
-        std::copy(std::begin(testun), std::end(testun), std::begin(testu));
+        std::copy(std::begin(testu), std::end(testu), std::begin(testun)); // Carry updates forward
         for (int i = 1; i < X; i++) {
             testu[i] = testun[i] - c * (testun[i] - testun[i - 1]) * dt / dx;
         }
