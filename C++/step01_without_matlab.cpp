@@ -52,16 +52,16 @@ int main() {
         }
     }
     
-    sort(x.begin(), x.end());
-    sort(testx.begin(), testx.end());
+    sort(x, x + X);
+    sort(testx, testx + X);
 
     // Linearly compare elements
     for (int i = 0; i < N; i++)
         if (u[i] != testu[i])
             std::cout << "x is equal" << std::endl;
 
-    sort(u.begin(), u.end());
-    sort(testu.begin(), testu.end());
+    sort(u, u + X);
+    sort(testu, testu + X);
 
     // Linearly compare elements
     for (int i = 0; i < N; i++)
