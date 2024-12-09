@@ -31,7 +31,7 @@ int main() {
     // Initialize spatial grid and initial condition
     // std::vector<double> x(X), u(X), un(X);
     double x[X], u[X], un[X];
-    double testx[X], testu[X];
+    double testun[X], testu[X];
 
     std::cout << "first loop" << std::endl;
 
@@ -45,7 +45,7 @@ int main() {
         }
 
 
-        std::copy(std::begin(testu), std::end(testu), std::begin(u));
+    std::copy(std::begin(testu), std::end(testu), std::begin(u));
 
 
 #ifdef MATPLOTLIB
@@ -66,24 +66,6 @@ int main() {
             for (int i = 1; i < X; i++) {
                 u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
             }
-
-
-
-        for (int n = 0; n < T; n++) {
-            std::copy(std::begin(un), std::end(un), std::begin(testu));
-            //un = u;
-            for (int i = 1; i < X; i++) {
-                testu[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
-            }
-        }
-
-    std::sort(u, u + X);
-    std::sort(testu, testu + X);
-
-    // Linearly compare elements
-    for (int i = 0; i < X; i++)
-        if (u[i] != testu[i])
-            std::cout << "u is unequal" << std::endl;
     
     
 #ifdef MATPLOTLIB
@@ -93,6 +75,22 @@ int main() {
         plt::pause(0.1);
 #endif
     }
+
+    for (int n = 0; n < T; n++) {
+        std::copy(std::begin(testun), std::end(testun), std::begin(testu));
+        //un = u;
+        for (int i = 1; i < X; i++) {
+            testu[i] = testun[i] - c * (testun[i] - testun[i - 1]) * dt / dx;
+        }
+    }
+
+    std::sort(u, u + X);
+    std::sort(testu, testu + X);
+
+    // Linearly compare elements
+    for (int i = 0; i < X; i++)
+        if (u[i] != testu[i])
+            std::cout << "u is unequal" << std::endl;
 
 #ifdef MATPLOTLIB
     plt::show();
