@@ -43,30 +43,7 @@ int main() {
                 std::cout << i << "\n" << std::endl;
             }
         }
-
-    for (int i = 0; i < X; i++) {
-        testx[i] = (5.0 * i) / (X - 1);
-        testu[i] = (testx[i] >= 0.5 && testx[i] <= 1) ? 2 : 1;
-        if (i % 10000 == 0) {
-            std::cout << i << "\n" << std::endl;
-        }
-    }
-    
-    std::sort(x, x + X);
-    std::sort(testx, testx + X);
-
-    // Linearly compare elements
-    for (int i = 0; i < X; i++)
-        if (u[i] != testu[i])
-            std::cout << "x is equal" << std::endl;
-
-    std::sort(u, u + X);
-    std::sort(testu, testu + X);
-
-    // Linearly compare elements
-    for (int i = 0; i < X; i++)
-        if (x[i] != testx[i])
-            std::cout << "x is equal" << std::endl;
+   
 
 #ifdef MATPLOTLIB
     plt::ion();
@@ -86,6 +63,23 @@ int main() {
             for (int i = 1; i < X; i++) {
                 u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
             }
+
+
+
+    for (int n = 0; n < T; n++) {
+        std::copy(std::begin(un), std::end(un), std::begin(testu));
+        //un = u;
+        for (int i = 1; i < X; i++) {
+            testu[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
+        }
+
+    std::sort(u, u + X);
+    std::sort(testu, testu + X);
+
+    // Linearly compare elements
+    for (int i = 0; i < X; i++)
+        if (u[i] != testu[i])
+            std::cout << "u is unequal" << std::endl;
     
     
 #ifdef MATPLOTLIB
