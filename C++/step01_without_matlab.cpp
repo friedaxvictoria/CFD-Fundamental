@@ -84,6 +84,9 @@ int main() {
         }
     }
 
+    std::cout << u << std::endl;
+    std::cout << testu << std::endl;
+
     std::sort(u, u + X);
     std::sort(testu, testu + X);
 
