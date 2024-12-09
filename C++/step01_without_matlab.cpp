@@ -76,9 +76,10 @@ int main() {
     }
 
     for (int n = 0; n < T; n++) {
-    std::copy(std::begin(testu), std::end(testu), std::begin(testun)); 
-    for (int i = 1; i < X; i++) {
-        testu[i] = testun[i] - c * (testun[i] - testun[i - 1]) * dt / dx;
+        std::copy(std::begin(testu), std::end(testu), std::begin(testun));
+        for (int i = 1; i < X; i++) {
+            testu[i] = testun[i] - c * (testun[i] - testun[i - 1]) * dt / dx;
+        }
     }
 
     std::sort(u, u + X);
