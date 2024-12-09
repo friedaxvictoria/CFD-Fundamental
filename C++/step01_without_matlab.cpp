@@ -61,7 +61,7 @@ int main() {
 
         std::cout << n << "\n" << std::endl;
 
-        //#pragma omp parallel for simd
+        /#pragma omp parallel for simd
             for (int i = 1; i < X; i++) {
                 u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
             }
@@ -82,6 +82,7 @@ int main() {
         }
     }
 
+    
     std::sort(u, u + X);
     std::sort(testu, testu + X);
 
