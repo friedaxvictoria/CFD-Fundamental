@@ -38,8 +38,8 @@ int main() {
         for (int i = 0; i < X; i++) {
             x[i] = (5.0 * i) / (X - 1);
             u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
-            if (i % 1000 == 0) {
-                std::cout << i << std::endl;
+            if (i % 10000 == 0) {
+                std::cout << i << "\n" << std::endl;
             }
         }
 
@@ -58,8 +58,8 @@ int main() {
         #pragma omp parallel for simd
             for (int i = 1; i < X; i++) {
                 u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
-                if (i % 1000 == 0) {
-                    std::cout << i;
+                if (i % 100000 == 0) {
+                    std::cout << i << "\n" << std::endl;
                 }
             }
     
