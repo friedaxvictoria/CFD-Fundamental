@@ -56,7 +56,7 @@ int main() {
 
     
     for (int n = 0; n < T; n++) {
-        std::copy(std::begin(un), std::end(un), std::begin(u));
+        std::copy(std::begin(u), std::end(u), std::begin(un));
         //un = u;
 
         std::cout << n << "\n" << std::endl;
@@ -76,10 +76,9 @@ int main() {
     }
 
     for (int n = 0; n < T; n++) {
-        std::copy(std::begin(testu), std::end(testu), std::begin(testun)); // Carry updates forward
-        for (int i = 1; i < X; i++) {
-            testu[i] = testun[i] - c * (testun[i] - testun[i - 1]) * dt / dx;
-        }
+    std::copy(std::begin(testu), std::end(testu), std::begin(testun)); 
+    for (int i = 1; i < X; i++) {
+        testu[i] = testun[i] - c * (testun[i] - testun[i - 1]) * dt / dx;
     }
 
     std::sort(u, u + X);
