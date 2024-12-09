@@ -43,7 +43,10 @@ int main() {
                 std::cout << i << "\n" << std::endl;
             }
         }
-   
+
+
+        std::copy(std::begin(testu), std::end(testu), std::begin(u));
+
 
 #ifdef MATPLOTLIB
     plt::ion();
