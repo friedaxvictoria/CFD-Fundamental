@@ -56,7 +56,7 @@ int main() {
     sort(testx, testx + X);
 
     // Linearly compare elements
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < X; i++)
         if (u[i] != testu[i])
             std::cout << "x is equal" << std::endl;
 
@@ -64,7 +64,7 @@ int main() {
     sort(testu, testu + X);
 
     // Linearly compare elements
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < X; i++)
         if (x[i] != testx[i])
             std::cout << "x is equal" << std::endl;
 
