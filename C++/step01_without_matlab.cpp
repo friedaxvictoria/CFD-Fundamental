@@ -21,7 +21,7 @@ int main() {
     // Simulation parameters
     //const int X = 40;
     //const int T = 41;
-    const int X = 2000;                    // Number of spatial points
+    const int X = 20000;                    // Number of spatial points
     const int T = 10000;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
@@ -59,7 +59,7 @@ int main() {
         std::copy(std::begin(u), std::end(u), std::begin(un));
         //un = u;
 
-        std::cout << n << "\n" << std::endl;
+        //std::cout << n << "\n" << std::endl;
 
         #pragma omp parallel for simd
             for (int i = 1; i < X; i++) {
