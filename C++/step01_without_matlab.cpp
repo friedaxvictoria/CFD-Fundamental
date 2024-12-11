@@ -59,7 +59,7 @@ int main() {
         std::copy(std::begin(u), std::end(u), std::begin(un));
         //un = u;
 
-        //std::cout << n << "\n" << std::endl;
+        std::cout << n << "\n" << std::endl;
 
         #pragma omp parallel for simd
             for (int i = 1; i < X; i++) {
