@@ -59,7 +59,7 @@ int main() {
         std::copy(std::begin(u), std::end(u), std::begin(un));
         //un = u;
 
-        std::cout << n << "\n" << std::endl;
+        //std::cout << n << "\n" << std::endl;
 
         #pragma omp parallel for simd
             for (int i = 1; i < X; i++) {
@@ -75,6 +75,7 @@ int main() {
 #endif
     }
 
+    /*
     for (int n = 0; n < T; n++) {
         std::copy(std::begin(testu), std::end(testu), std::begin(testun));
         for (int i = 1; i < X; i++) {
@@ -82,7 +83,7 @@ int main() {
         }
     }
 
-    /*
+    
     std::sort(u, u + X);
     std::sort(testu, testu + X);
 
