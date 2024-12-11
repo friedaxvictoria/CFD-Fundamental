@@ -38,7 +38,7 @@ int main() {
 
     #pragma omp parallel
     {
-        std::cout << omp_get_num_threads() << std::endl;
+        std::cout << (int)omp_get_num_threads() << std::endl;
     }
 
     #pragma omp parallel for simd
