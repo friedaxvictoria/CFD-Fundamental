@@ -38,13 +38,14 @@ int main() {
 
     #pragma omp parallel
     {
-        std::cout << (int)omp_get_num_threads() << std::endl;
+        std::cout << omp_get_num_threads() << std::endl;
     }
 
     #pragma omp parallel for simd
         for (int i = 0; i < X; i++) {
             x[i] = (5.0 * i) / (X - 1);
             u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
+            std::cout << omp_get_thread_num() << std::endl;
             if (i % 10000 == 0) {
                 std::cout << i << "\n" << std::endl;
             }
