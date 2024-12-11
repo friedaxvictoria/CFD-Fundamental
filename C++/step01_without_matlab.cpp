@@ -36,7 +36,7 @@ int main() {
 
     std::cout << "first loop" << std::endl;
 
-    omp_set_num_threads(10);
+    omp_set_num_threads(1);
 
     #pragma omp parallel
     {
