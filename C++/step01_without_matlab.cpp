@@ -19,10 +19,10 @@ namespace plt = matplotlibcpp;
 int main() {
     auto start = high_resolution_clock::now();
     // Simulation parameters
-    const int X = 40;
-    const int T = 41;
-    //const int X = 20000;                    // Number of spatial points
-    //const int T = 1000000;                    // Number of time steps
+    //const int X = 40;
+    //const int T = 41;
+    const int X = 20000;                    // Number of spatial points
+    const int T = 1000000;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
     const double dx = 2.0 / (X - 1);     // Spatial step size
@@ -45,7 +45,7 @@ int main() {
         }
 
 
-    std::copy(std::begin(testu), std::end(testu), std::begin(u));
+    //std::copy(std::begin(testu), std::end(testu), std::begin(u));
 
 #ifdef MATPLOTLIB
     plt::ion();
@@ -82,7 +82,7 @@ int main() {
         }
     }
 
-    
+    /*
     std::sort(u, u + X);
     std::sort(testu, testu + X);
 
@@ -95,6 +95,7 @@ int main() {
     for (int i = 0; i < X; i++)
         if (u[i] != testu[i])
             std::cout << "u is unequal" << std::endl;
+    */
 
 #ifdef MATPLOTLIB
     plt::show();
