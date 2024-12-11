@@ -36,12 +36,14 @@ int main() {
 
     std::cout << "first loop" << std::endl;
 
+    omp_set_num_threads(10);
+
     #pragma omp parallel
     {
         std::cout << "total threads" << omp_get_num_threads() << std::endl;
     }
 
-    #pragma omp parallel for simd
+    #pragma omp parallel for simd 
         for (int i = 0; i < X; i++) {
             x[i] = (5.0 * i) / (X - 1);
             u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
