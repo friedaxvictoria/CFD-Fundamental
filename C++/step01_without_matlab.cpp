@@ -36,7 +36,10 @@ int main() {
 
     std::cout << "first loop" << std::endl;
 
-    std::cout << omp_get_num_threads() << std::endl;
+    #pragma omp parallel
+    {
+        std::cout << omp_get_num_threads() << std::endl;
+    }
 
     #pragma omp parallel for simd
         for (int i = 0; i < X; i++) {
@@ -55,6 +58,7 @@ int main() {
     plt::Plot plot;
 #endif
     // Time-stepping loop
+    std::cout << "second loop" << std::endl;
 
     
     for (int n = 0; n < T; n++) {
@@ -64,7 +68,6 @@ int main() {
         //std::cout << n << "\n" << std::endl;
 
         #pragma omp parallel for simd
-            std::cout << "second loop" << std::endl;
             for (int i = 1; i < X; i++) {
                 u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
             }
