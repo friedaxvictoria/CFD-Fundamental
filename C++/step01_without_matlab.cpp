@@ -55,7 +55,6 @@ int main() {
     plt::Plot plot;
 #endif
     // Time-stepping loop
-    std::cout << "second loop" << std::endl;
 
     
     for (int n = 0; n < T; n++) {
@@ -65,6 +64,7 @@ int main() {
         //std::cout << n << "\n" << std::endl;
 
         #pragma omp parallel for simd
+            std::cout << "second loop" << std::endl;
             for (int i = 1; i < X; i++) {
                 u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
             }
