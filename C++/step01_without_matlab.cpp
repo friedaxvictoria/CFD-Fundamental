@@ -35,6 +35,8 @@ int main() {
 
     std::cout << "first loop" << std::endl;
 
+    std::cout << omp_get_num_threads() << std::endl;
+
     #pragma omp parallel for simd
         for (int i = 0; i < X; i++) {
             x[i] = (5.0 * i) / (X - 1);
