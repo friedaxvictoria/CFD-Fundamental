@@ -36,13 +36,6 @@ int main() {
 
     std::cout << "first loop" << std::endl;
 
-    //omp_set_num_threads(1);
-
-    #pragma omp parallel
-    {
-        std::cout << "total threads" << omp_get_num_threads() << std::endl;
-    }
-
     #pragma omp parallel for simd 
         for (int i = 0; i < X; i++) {
             x[i] = (5.0 * i) / (X - 1);
@@ -84,7 +77,7 @@ int main() {
 #endif
     }
 
-    /*
+    
     for (int n = 0; n < T; n++) {
         std::copy(std::begin(testu), std::end(testu), std::begin(testun));
         for (int i = 1; i < X; i++) {
@@ -105,7 +98,7 @@ int main() {
     for (int i = 0; i < X; i++)
         if (u[i] != testu[i])
             std::cout << "u is unequal" << std::endl;
-    */
+    
 
 #ifdef MATPLOTLIB
     plt::show();
