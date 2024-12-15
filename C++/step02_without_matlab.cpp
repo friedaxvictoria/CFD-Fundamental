@@ -1,10 +1,14 @@
+#ifdef MATPLOTLIB
 #include "matplotlibcpp.h"
+#endif
 #include <cmath>
 #include <vector>
 #include <algorithm>
 #include <iostream>
 
+#ifdef MATPLOTLIB
 namespace plt = matplotlibcpp;
+#endif
 
 ////////////////////////////////////////////////////////////
 // Step 2: 1D Nonlinear Convection
@@ -26,8 +30,10 @@ int main() {
         u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
     }
 
-    plt::ion();
-    plt::Plot plot;
+    #ifdef MATPLOTLIB
+        plt::ion();
+        plt::Plot plot;
+    #endif
 
     // Time-stepping loop
     for (int n = 0; n < T; n++) {
@@ -37,12 +43,23 @@ int main() {
             u[i] = un[i] - un[i] * (un[i] - un[i-1]) * dt / dx;
         }
 
-        plot.update(x, u);
-        plt::xlim(0, 2);
-        plt::ylim(0.5, 2.5);
-        plt::pause(0.1);
+    #ifdef MATPLOTLIB
+            plot.update(x, u);
+            plt::xlim(0, 2);
+            plt::ylim(0.5, 2.5);
+            plt::pause(0.1);
+    #endif
+
     }
 
-    plt::show();
+    #ifdef MATPLOTLIB
+        plt::show();
+    #endif
+
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    std::cout << "microseconds: " << duration.count() << std::endl;
+    auto duration_sec = duration_cast<seconds>(stop - start);
+    std::cout << "seconds: " << duration_sec.count() << std::endl;
     return 0;
 }
