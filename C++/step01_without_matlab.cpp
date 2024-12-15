@@ -22,7 +22,7 @@ int main() {
     // Simulation parameters
     //const int X = 40;
     //const int T = 41;
-    const int X = 40000;                    // Number of spatial points
+    const int X = 20;                    // Number of spatial points
     const int T = 10000;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
@@ -47,7 +47,7 @@ int main() {
         }
 
 
-    //std::copy(std::begin(testu), std::end(testu), std::begin(u));
+    std::copy(std::begin(testu), std::end(testu), std::begin(u));
 
 #ifdef MATPLOTLIB
     plt::ion();
@@ -84,10 +84,6 @@ int main() {
             testu[i] = testun[i] - c * (testun[i] - testun[i - 1]) * dt / dx;
         }
     }
-
-    
-    std::sort(u, u + X);
-    std::sort(testu, testu + X);
 
     for (int i = 0; i < X; i++) {
         std::cout << u[i] << std::endl;
