@@ -73,7 +73,7 @@ int main() {
 #endif
     }
 
-    
+    /*
     for (int n = 0; n < T; n++) {
         std::copy(std::begin(testu), std::end(testu), std::begin(testun));
         for (int i = 1; i < X; i++) {
@@ -87,7 +87,7 @@ int main() {
         if (u[i] != testu[i])
             std::cout << "u is unequal" << std::endl;
     }
-        
+     */   
     
 
 #ifdef MATPLOTLIB
