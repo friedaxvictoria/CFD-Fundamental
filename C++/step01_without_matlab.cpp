@@ -30,9 +30,9 @@ int main() {
     const double dt = 0.025;             // Time step size
 
     // Initialize spatial grid and initial condition
-    // std::vector<double> x(X), u(X), un(X);
-    double x[X], u[X], un[X];
-    double testun[X], testu[X];
+    std::vector<double> x(X), u(X), un(X);
+    //double x[X], u[X], un[X];
+    //double testun[X], testu[X];
 
     std::cout << "first loop" << std::endl;
 
@@ -46,7 +46,7 @@ int main() {
         }
 
 
-    std::copy(std::begin(testu), std::end(testu), std::begin(u));
+    //std::copy(std::begin(testu), std::end(testu), std::begin(u));
 
 #ifdef MATPLOTLIB
     plt::ion();
@@ -57,8 +57,8 @@ int main() {
 
     
     for (int n = 0; n < T; n++) {
-        std::copy(std::begin(u), std::end(u), std::begin(un));
-        //un = u;
+        //std::copy(std::begin(u), std::end(u), std::begin(un));
+        un = u;
         #pragma omp parallel for simd
             for (int i = 1; i < X; i++) {
                 u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
