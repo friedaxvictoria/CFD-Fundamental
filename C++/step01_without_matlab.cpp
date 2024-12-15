@@ -33,8 +33,8 @@ int main() {
     double x[X], u[X], un[X];
     double testun[X], testu[X];
 
-    sum_values = 0;
-    num_rounds = 10;
+    int sum_values = 0;
+    int num_rounds = 10;
 
     for (int round = 0; round < num_rounds; round++) {
 
@@ -58,7 +58,6 @@ int main() {
 
 
             for (int n = 0; n < T; n++) {
-                #pragma omp for simd
                 std::copy(std::begin(u), std::end(u), std::begin(un));
                 //un = u;
                 #pragma omp parallel for simd
