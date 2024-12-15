@@ -23,7 +23,7 @@ int main() {
     //const int X = 40;
     //const int T = 41;
     const int X = 20;                    // Number of spatial points
-    const int T = 10000;                    // Number of time steps
+    const int T = 100;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
     const double dx = 2.0 / (X - 1);     // Spatial step size
@@ -40,7 +40,6 @@ int main() {
         for (int i = 0; i < X; i++) {
             x[i] = (5.0 * i) / (X - 1);
             u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
-            std::cout << "num of thread: " << omp_get_thread_num() << std::endl;
             if (i % 10000 == 0) {
                 std::cout << i << "\n" << std::endl;
             }
@@ -60,9 +59,6 @@ int main() {
     for (int n = 0; n < T; n++) {
         std::copy(std::begin(u), std::end(u), std::begin(un));
         //un = u;
-
-        //std::cout << n << "\n" << std::endl;
-
         #pragma omp parallel for simd
             for (int i = 1; i < X; i++) {
                 u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
@@ -88,12 +84,10 @@ int main() {
     for (int i = 0; i < X; i++) {
         std::cout << u[i] << std::endl;
         std::cout << testu[i] << std::endl;
-    }
-
-    // Linearly compare elements
-    for (int i = 0; i < X; i++)
         if (u[i] != testu[i])
             std::cout << "u is unequal" << std::endl;
+    }
+        
     
 
 #ifdef MATPLOTLIB
