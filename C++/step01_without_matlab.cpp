@@ -22,7 +22,7 @@ int main() {
     // Simulation parameters
     //const int X = 40;
     //const int T = 41;
-    const int X = 400000;                    // Number of spatial points
+    const int X = 40000;                    // Number of spatial points
     const int T = 400000;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
