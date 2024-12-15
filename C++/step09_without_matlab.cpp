@@ -35,7 +35,8 @@ int main() {
     for (int i = 0; i < Y; i++)
         y[i] = (2 * i) / (Y - 1.0);
 
-    std::vector<std::vector<double>> nX(X, std::vector<double>(Y)), nY(X, std::vector<double>(Y));
+    //std::vector<std::vector<double>> nX(X, std::vector<double>(Y)), nY(X, std::vector<double>(Y));
+    double nX[X][Y], nY[X][Y];
     for (int i = 0; i < X; ++i) {
         for (int j = 0; j < Y; ++j) {
             nX[i][j] = x[i]; 
@@ -43,11 +44,13 @@ int main() {
         }
     }
 
-    std::vector<std::vector<double>> p(X, std::vector<double>(Y));
-
+    //std::vector<std::vector<double>> p(X, std::vector<double>(Y));
+    double p[X][Y];
+    #pragma omp parallel for simd
     for (int i = 0; i < X; i++) p[X-1][i] = y[i];
  
     // Time-stepping loop
+    #pragma omp parallel for
     for (int n = 0; n < T; n++) {
          for (int i = 1; i < X - 1; ++i) {
             for (int j = 1; j < Y - 1; ++j) {

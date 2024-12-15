@@ -59,7 +59,7 @@ int main() {
     for (int n = 0; n < T; n++) {
         std::copy(std::begin(u), std::end(u), std::begin(un));
         //un = u;
-        #pragma omp parallel for
+        #pragma omp parallel for simd
             for (int i = 1; i < X; i++) {
                 u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
             }
