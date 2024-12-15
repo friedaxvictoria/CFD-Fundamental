@@ -37,6 +37,8 @@ int main() {
 
     //std::vector<std::vector<double>> nX(X, std::vector<double>(Y)), nY(X, std::vector<double>(Y));
     double nX[X][Y], nY[X][Y];
+    //test if this is actually faster with collapse
+    #pragma omp parallel for collapse(2) simd
     for (int i = 0; i < X; ++i) {
         for (int j = 0; j < Y; ++j) {
             nX[i][j] = x[i]; 
