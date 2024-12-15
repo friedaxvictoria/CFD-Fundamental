@@ -15,6 +15,8 @@ namespace plt = matplotlibcpp;
 ////////////////////////////////////////////////////////////
 
 int main() {
+    auto start = high_resolution_clock::now();
+
     // Simulation parameters
     const int X = 41;                    // Number of spatial points
     const int T = 30;                    // Number of time steps
@@ -25,10 +27,11 @@ int main() {
     // Initialize spatial grid and initial condition
     std::vector<double> x(X), u(X), un(X);
 
-    for (int i = 0; i < X; i++) {
-        x[i] = (5.0 * i) / (X - 1);
-        u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
-    }
+    #pragma omp parallel for simd 
+        for (int i = 0; i < X; i++) {
+            x[i] = (5.0 * i) / (X - 1);
+            u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
+        }
 
     #ifdef MATPLOTLIB
         plt::ion();
