@@ -36,7 +36,6 @@ int main() {
     int sum_values = 0;
     int num_rounds = 10;
 
-    std::cout << omp_get_thread_num() << std::endl;
 
     for (int round = 0; round < num_rounds; round++) {
 
@@ -44,6 +43,8 @@ int main() {
 
             //not good with simd bc of implied if statement? should you split into two loops?
             #ifdef PARALLEL
+            #pragma omp parallel
+                std::cout << omp_get_thread_num() << std::endl;
             #pragma omp parallel for simd
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
