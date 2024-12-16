@@ -21,7 +21,7 @@ int main() {
     // Simulation parameters
     //const int X = 40;
     //const int T = 41;
-    const int X = 800000;                    // Number of spatial points
+    const int X = 900000;                    // Number of spatial points
     const int T = 100000;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
@@ -31,7 +31,7 @@ int main() {
     // Initialize spatial grid and initial condition
     //std::vector<double> x(X), u(X), un(X);
     double x[X], u[X], un[X];
-    double testun[X], testu[X];
+    //double testun[X], testu[X];
 
     int sum_values = 0;
     int num_rounds = 10;
