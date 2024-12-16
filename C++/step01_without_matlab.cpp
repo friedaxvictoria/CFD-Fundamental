@@ -21,7 +21,7 @@ int main() {
     // Simulation parameters
     //const int X = 40;
     //const int T = 41;
-    const int X = 300000;                    // Number of spatial points
+    const int X = 400000;                    // Number of spatial points
     const int T = 100000;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
@@ -42,7 +42,6 @@ int main() {
 
             //not good with simd bc of implied if statement? should you split into two loops?
             #ifdef PARALLEL
-            std::cout << "parallel" << std::endl;
             #pragma omp parallel for simd
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
@@ -53,7 +52,6 @@ int main() {
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
             }
             #else
-                std::cout << "sequentiel" << std::endl;
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
