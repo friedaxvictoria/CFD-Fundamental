@@ -27,6 +27,7 @@ int main() {
     //std::vector<double> x(X), y(Y);
     double x[X], y[X];
 
+#ifdef PARALLEL
     #pragma omp parallel for simd 
     for (int i = 0; i < X; i++)
         x[i] = (2 * i) / (X - 1.0);
@@ -66,6 +67,43 @@ int main() {
             p[i][0] = p[i][1];       
             p[i][Y - 1] = p[i][Y - 2]; 
         }
+#else
+    for (int i = 0; i < X; i++)
+        x[i] = (2 * i) / (X - 1.0);
+
+    for (int i = 0; i < Y; i++)
+        y[i] = (2 * i) / (Y - 1.0);
+
+    //std::vector<std::vector<double>> nX(X, std::vector<double>(Y)), nY(X, std::vector<double>(Y));
+    double nX[X][Y], nY[X][Y];
+    //test if this is actually faster with collapse
+    for (int i = 0; i < X; ++i) {
+        for (int j = 0; j < Y; ++j) {
+            nX[i][j] = x[i];
+            nY[i][j] = y[j];
+        }
+    }
+
+    //std::vector<std::vector<double>> p(X, std::vector<double>(Y));
+    double p[X][Y];
+    for (int i = 0; i < X; i++) p[X - 1][i] = y[i];
+
+    // Time-stepping loop
+    //backward and forward dependencies --> no parallelisation possible
+    for (int n = 0; n < T; n++) {
+        for (int i = 1; i < X - 1; ++i) {
+            for (int j = 1; j < Y - 1; ++j) {
+                p[i][j] = (dy * dy * (p[i + 1][j] + p[i - 1][j]) + dx * dx * (p[i][j + 1] + p[i][j - 1])) / (2 * (dy * dy + dx * dx));
+            }
+        }
+
+        // Apply boundary conditions
+        for (int i = 1; i < X - 1; ++i) {
+            p[i][0] = p[i][1];
+            p[i][Y - 1] = p[i][Y - 2];
+        }
+#endif
+
  
     #ifdef MATPLOTLIB
     const long animatedFig = plt::figure(1);
