@@ -52,7 +52,7 @@ int main() {
     for (int i = 0; i < X; i++) p[X-1][i] = y[i];
  
     // Time-stepping loop
-    #pragma omp parallel for
+    //backward and forward dependencies --> no parallelisation possible
     for (int n = 0; n < T; n++) {
          for (int i = 1; i < X - 1; ++i) {
             for (int j = 1; j < Y - 1; ++j) {
@@ -61,9 +61,10 @@ int main() {
         }
 
         // Apply boundary conditions
+        #pragma omp parallel for simd
         for (int i = 1; i < X - 1; ++i) {
-        p[i][0] = p[i][1];       
-        p[i][Y - 1] = p[i][Y - 2]; 
+            p[i][0] = p[i][1];       
+            p[i][Y - 1] = p[i][Y - 2]; 
         }
  
     #ifdef MATPLOTLIB

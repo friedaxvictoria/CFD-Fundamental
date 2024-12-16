@@ -21,8 +21,8 @@ int main() {
     // Simulation parameters
     //const int X = 40;
     //const int T = 41;
-    const int X = 40000;                    // Number of spatial points
-    const int T = 1000000;                    // Number of time steps
+    const int X = 100000;                    // Number of spatial points
+    const int T = 100000;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
     const double dx = 2.0 / (X - 1);     // Spatial step size
@@ -40,7 +40,8 @@ int main() {
 
         auto start = high_resolution_clock::now();
 
-        #pragma omp parallel for simd 
+            //not good with simd bc of implied if statement? should you split into two loops?
+            #pragma omp parallel for
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
@@ -54,8 +55,6 @@ int main() {
             plt::Plot plot;
         #endif
             // Time-stepping loop
-            //std::cout << "second loop" << std::endl;
-
 
             for (int n = 0; n < T; n++) {
                 std::copy(std::begin(u), std::end(u), std::begin(un));
