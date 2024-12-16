@@ -44,8 +44,8 @@ int main() {
             //not good with simd bc of implied if statement? should you split into two loops?
             #ifdef PARALLEL
             #pragma omp parallel
-                std::cout << omp_get_thread_num() << std::endl;
-            #pragma omp parallel for simd
+                std::cout << omp_get_num_threads() << std::endl;
+            #pragma omp parallel for
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;

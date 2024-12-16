@@ -62,10 +62,10 @@ int main() {
             }
         }
 
-        for (int i = 1; i < X - 1; ++i) {
-            old_p = p[i][:];
-            for (int j = 1; j < Y - 1; ++j) {
-                p[i][j] += dx * dx * (p[i][j+1]  + old_p[i][j-1] ))/(2 * (dy * dy  + dx * dx));
+        for (int j = 1; j < Y - 1; ++j) {
+            #pragma omp simd
+            or (int i = 1; i < X - 1; ++i) {
+                p[i][j] += dx * dx * (p[i][j+1]  + p[i][j-1] ))/(2 * (dy * dy  + dx * dx));
             }
         }
 
