@@ -41,7 +41,9 @@ int main() {
         auto start = high_resolution_clock::now();
 
             //not good with simd bc of implied if statement? should you split into two loops?
+            #ifdef PARALLEL
             #pragma omp parallel for simd
+        std::cout << "parallel" << std::endl;
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
             }
@@ -50,6 +52,13 @@ int main() {
             for (int i = 0; i < X; i++) {
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
             }
+            #else
+                std::cout << "sequentiel" << std::endl;
+            for (int i = 0; i < X; i++) {
+                x[i] = (5.0 * i) / (X - 1);
+                u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
+            }
+            #endif
 
 
         //std::copy(std::begin(testu), std::end(testu), std::begin(u));
@@ -60,6 +69,7 @@ int main() {
         #endif
             // Time-stepping loop
 
+        #ifdef PARALLEL
             for (int n = 0; n < T; n++) {
                 std::copy(std::begin(u), std::end(u), std::begin(un));
                 //un = u;
@@ -67,7 +77,14 @@ int main() {
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
-
+        #else
+            for (int n = 0; n < T; n++) {
+                std::copy(std::begin(u), std::end(u), std::begin(un));
+                //un = u;
+                for (int i = 1; i < X; i++) {
+                    u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
+                }
+        #endif
 
         #ifdef MATPLOTLIB
                 plot.update(x, u);
