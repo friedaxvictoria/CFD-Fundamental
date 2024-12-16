@@ -36,6 +36,8 @@ int main() {
     int sum_values = 0;
     int num_rounds = 10;
 
+    std::cout << omp_get_thread_num() << std::endl;
+
     for (int round = 0; round < num_rounds; round++) {
 
         auto start = high_resolution_clock::now();
