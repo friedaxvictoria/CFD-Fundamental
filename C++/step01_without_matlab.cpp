@@ -48,17 +48,32 @@ int main() {
             #pragma omp parallel for simd
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
-            }
-
-            #pragma omp parallel for
-            for (int i = 0; i < X; i++) {
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
             }
+
+            /*#pragma omp parallel for
+            for (int i = 0; i < X; i++) {
+                u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
+            }*/
+
+            for (int n = 0; n < T; n++) {
+                std::copy(std::begin(u), std::end(u), std::begin(un));
+                //un = u;
+                #pragma omp parallel for simd
+                for (int i = 1; i < X; i++) {
+                    u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
+                }
             #else
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
             }
+            for (int n = 0; n < T; n++) {
+                std::copy(std::begin(u), std::end(u), std::begin(un));
+                //un = u;
+                for (int i = 1; i < X; i++) {
+                    u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
+                }
             #endif
 
 
@@ -69,23 +84,6 @@ int main() {
             plt::Plot plot;
         #endif
             // Time-stepping loop
-
-        #ifdef PARALLEL
-            for (int n = 0; n < T; n++) {
-                std::copy(std::begin(u), std::end(u), std::begin(un));
-                //un = u;
-                #pragma omp parallel for simd
-                for (int i = 1; i < X; i++) {
-                    u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
-                }
-        #else
-            for (int n = 0; n < T; n++) {
-                std::copy(std::begin(u), std::end(u), std::begin(un));
-                //un = u;
-                for (int i = 1; i < X; i++) {
-                    u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
-                }
-        #endif
 
         #ifdef MATPLOTLIB
                 plot.update(x, u);

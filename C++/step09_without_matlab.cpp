@@ -38,7 +38,6 @@ int main() {
 
     //std::vector<std::vector<double>> nX(X, std::vector<double>(Y)), nY(X, std::vector<double>(Y));
     double nX[X][Y], nY[X][Y];
-    //test if this is actually faster with collapse
     #pragma omp parallel for collapse(2) simd
     for (int i = 0; i < X; ++i) {
         for (int j = 0; j < Y; ++j) {
@@ -54,6 +53,29 @@ int main() {
  
     // Time-stepping loop
     //backward and forward dependencies --> no parallelisation possible
+    /*
+    * for (int n = 0; n < T; n++) {
+         for (int i = 1; i < X - 1; ++i) {
+            #pragma omp simd
+            for (int j = 1; j < Y - 1; ++j) {
+                p[i][j] = (dy * dy * (p[i+1][j]  + p[i-1][j] )/(2 * (dy * dy  + dx * dx));
+            }
+        }
+
+        for (int i = 1; i < X - 1; ++i) {
+            old_p = p[i][:];
+            for (int j = 1; j < Y - 1; ++j) {
+                p[i][j] += dx * dx * (p[i][j+1]  + old_p[i][j-1] ))/(2 * (dy * dy  + dx * dx));
+            }
+        }
+
+        // Apply boundary conditions
+        #pragma omp parallel for simd
+        for (int i = 1; i < X - 1; ++i) {
+            p[i][0] = p[i][1];       
+            p[i][Y - 1] = p[i][Y - 2]; 
+        }
+    */
     for (int n = 0; n < T; n++) {
          for (int i = 1; i < X - 1; ++i) {
             for (int j = 1; j < Y - 1; ++j) {
