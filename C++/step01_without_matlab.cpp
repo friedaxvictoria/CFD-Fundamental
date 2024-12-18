@@ -25,7 +25,7 @@ int main() {
     const int T = 500;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
-    const float dx = 1.999 / (X - 1);     // Spatial step size
+    const float dx = 2.0 / (X - 1);     // Spatial step size
     const float dt = 0.025;             // Time step size
 
     // Initialize spatial grid and initial condition
