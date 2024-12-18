@@ -25,12 +25,12 @@ int main() {
     const int T = 150000;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
-    const double dx = 2.0 / (X - 1);     // Spatial step size
-    const double dt = 0.025;             // Time step size
+    const float dx = 2.0 / (X - 1);     // Spatial step size
+    const float dt = 0.025;             // Time step size
 
     // Initialize spatial grid and initial condition
     //std::vector<double> x(X), u(X), un(X);
-    double x[X], u[X], un[X];
+    float x[X], u[X], un[X];
     //double testun[X], testu[X];
 
     int sum_values = 0;
