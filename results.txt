@@ -1,0 +1,19 @@
+step 1:
+sequential:
+1 thread:
+2 threads:
+4 threads:
+8 threads:
+16 threads:
+32 threads:
+64 threads:
+
+step 5:
+sequential:
+1 thread:
+2 threads:
+4 threads:
+8 threads:
+16 threads:
+32 threads:
+64 threads:
