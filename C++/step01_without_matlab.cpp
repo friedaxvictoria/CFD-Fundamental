@@ -16,7 +16,7 @@ namespace plt = matplotlibcpp;
 ////////////////////////////////////////////////////////////
 // Step 1: 1D Linear Convection
 ////////////////////////////////////////////////////////////
-const int X = 500000000;                    // Number of spatial points
+const int X = 300000000;                    // Number of spatial points
 static float x[X], u[X], un[X];
 int main() {
     // Simulation parameters
