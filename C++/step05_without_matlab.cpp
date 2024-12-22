@@ -21,7 +21,7 @@ static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y];
 int main() {
     // Define simulation parameters
 
-    const int T = 100;                         // Total number of time steps
+    const int T = 250;                         // Total number of time steps
 
     const double  c = 1.;                     // Convection coefficient
     const double dx = 2. / (X - 1);           // Step size in the X direction
