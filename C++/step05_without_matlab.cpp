@@ -10,8 +10,8 @@ using namespace std::chrono;
 // Step 5: 2D Linear Convection
 ////////////////////////////////////////////////////////////
 
-const int X = 500000;                         // Number of points along X-axis
-const int Y = 500000;                         // Number of points along Y-axis
+const int X = 25000;                         // Number of points along X-axis
+const int Y = 25000;                         // Number of points along Y-axis
 static float x[X], y[X];
 static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y];
 
