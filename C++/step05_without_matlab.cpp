@@ -45,7 +45,7 @@ for (int round = 0; round < num_rounds; round++) {
     for (int i = 0; i < Y; i++)
         y[i] = (2 * i) / (Y - 1.0);
 
-    #pragma omp parallel for simd collapse(2) 
+    #pragma omp parallel for collapse(2) 
     for (int i = 0; i < X; ++i) {
         for (int j = 0; j < Y; ++j) {
             nX[i][j] = x[i];
@@ -66,7 +66,7 @@ for (int round = 0; round < num_rounds; round++) {
         std::copy(&u[0][0], &u[0][0] + X * Y, &un[0][0]);
         //std::copy(std::begin(u), std::end(u), std::begin(un));
 
-        #pragma omp parallel for simd collapse(2) 
+        #pragma omp parallel for collapse(2) 
         for (int i = 1; i < X - 1; i++) {
             for (int j = 1; j < Y - 1; j++)
                 u[i][j] = un[i][j] - c * (un[i][j] - un[i - 1][j]) * dt / dx - c * (un[i][j] - un[i][j - 1]) * dt / dx;
