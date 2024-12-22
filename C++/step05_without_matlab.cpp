@@ -13,7 +13,7 @@ using namespace std::chrono;
 const int X = 10000;                         // Number of points along X-axis
 const int Y = 10000;                         // Number of points along Y-axis
 static float x[X], y[X];
-static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y], u_not[X][Y];
+static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y];
 
 //std::vector<std::vector<double>> u(X, std::vector<double>(Y)), un(X, std::vector<double>(Y));
 //std::vector<std::vector<double>> nX(X, std::vector<double>(Y)), nY(X, std::vector<double>(Y));
@@ -29,7 +29,7 @@ int main() {
     const double dt = 0.2 * dx;               // Time step size
 
     int sum_values = 0;
-    int num_rounds = 1;
+    int num_rounds = 5;
 
 
 for (int round = 0; round < num_rounds; round++) {
@@ -82,48 +82,6 @@ for (int round = 0; round < num_rounds; round++) {
         for (int i = 0; i < X; i++) u[i][Y - 1] = 1.;
         #pragma omp parallel for simd
         for (int i = 0; i < Y; i++) u[X - 1][i] = 1.;
-    }
-
-    //not parallel
-
-    for (int i = 0; i < X; i++)
-        x[i] = (2 * i) / (X - 1.0);
-
-    for (int i = 0; i < Y; i++)
-        y[i] = (2 * i) / (Y - 1.0);
-
-    for (int i = 0; i < X; ++i) {
-        for (int j = 0; j < Y; ++j) {
-            nX[i][j] = x[i];
-            nY[i][j] = y[j];
-        }
-    }
-
-    for (int i = 0; i < X; i++) {
-        for (int j = 0; j < Y; j++)
-            u_not[i][j] = ((x[i] >= 0.5 && x[i] <= 1) && (y[j] >= 0.5 && y[j] <= 1)) ? 2.0 : 1.0;
-    }
-
-
-    // Time-stepping loop
-    for (int n = 0; n < T; n++) {
-        std::copy(&u_not[0][0], &u_not[0][0] + X * Y, &un[0][0]);
-
-        for (int i = 1; i < X - 1; i++) {
-            for (int j = 1; j < Y - 1; j++)
-                u_not[i][j] = un[i][j] - c * (un[i][j] - un[i - 1][j]) * dt / dx - c * (un[i][j] - un[i][j - 1]) * dt / dx;
-        }
-
-        // Boundary conditions
-        for (int i = 0; i < Y; i++) u_not[i][0] = 1.;
-        for (int i = 0; i < X; i++) u_not[0][i] = 1.;
-
-        for (int i = 0; i < X; i++) u_not[i][Y - 1] = 1.;
-        for (int i = 0; i < Y; i++) u_not[X - 1][i] = 1.;
-    }
-    for (int i = 0; i < X; i++) {
-        for (int j = 0; j < Y; j++)
-            if (u_not[i][j] != u[i][j]) std::cout << "not equal" << std::endl;
     }
 
     #else
