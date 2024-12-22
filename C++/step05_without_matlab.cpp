@@ -155,8 +155,8 @@ int main() {
 
         for (int i = 0; i < X; i++) u[i][Y - 1] = 1.;
         for (int i = 0; i < Y; i++) u[X - 1][i] = 1.;
- 
+    }
 #endif
-}
+
     return 0;
 }
