@@ -10,7 +10,7 @@
 const int X = 31;                         // Number of points along X-axis
 const int Y = 31;                         // Number of points along Y-axis
 static float x[X], y[X];
-static float nX[X, Y], nY[X, Y], u[X, Y], un[X, Y];
+static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y];
 
 //std::vector<std::vector<double>> u(X, std::vector<double>(Y)), un(X, std::vector<double>(Y));
 //std::vector<std::vector<double>> nX(X, std::vector<double>(Y)), nY(X, std::vector<double>(Y));
@@ -52,7 +52,8 @@ int main() {
  
     // Time-stepping loop
     for (int n = 0; n < T; n++) {
-        std::copy(std::begin(u), std::end(u), std::begin(un));
+        std::copy(&u[0][0], &u[0][0] + X * Y, &un[0][0]);
+        //std::copy(std::begin(u), std::end(u), std::begin(un));
 
         #pragma omp parallel for collapse(2) simd
         for (int i = 1; i < X-1; i++) {
@@ -98,7 +99,7 @@ int main() {
 
     // Time-stepping loop
     for (int n = 0; n < T; n++) {
-        std::copy(std::begin(u), std::end(u), std::begin(un));
+        std::copy(&u[0][0], &u[0][0] + X * Y, &un[0][0]);
 
         for (int i = 1; i < X - 1; i++) {
             for (int j = 1; j < Y - 1; j++)
