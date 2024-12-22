@@ -55,7 +55,7 @@ for (int round = 0; round < num_rounds; round++) {
     }
 
     // no simd bc of i-else
-    #pragma omp parallel for
+    #pragma omp parallel for collapse(2) 
     for (int i = 0; i < X; i++) {
         for (int j = 0; j < Y; j++)
             u[i][j] = ((x[i] >= 0.5 && x[i] <= 1) && (y[j] >= 0.5 && y[j] <= 1)) ? 2.0 : 1.0;
