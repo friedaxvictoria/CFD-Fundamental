@@ -59,7 +59,7 @@ int main() {
         #pragma omp parallel for simd collapse(2) 
         for (int i = 1; i < X-1; i++) {
             for (int j = 1; j < Y-1; j++)
-            u[i][j] = un[i][j] - c * (un[i][j] - un[i-1][j]) * dt / dx - c * (un[i][j] - un[i][j-1]) * dt / dx;
+                u[i][j] = un[i][j] - c * (un[i][j] - un[i-1][j]) * dt / dx - c * (un[i][j] - un[i][j-1]) * dt / dx;
         }
 
         // Boundary conditions
@@ -113,7 +113,11 @@ int main() {
 
         for (int i = 0; i < X; i++) {
             for (int j = 0; j < Y; j++)
-                if (u_not[i][j] != u[i][j]) std::cout << "not equal" << std::endl;
+                if (u_not[i][j] != u[i][j]) {
+                    std::cout << u_not[i][j] << std::endl;
+                    std::cout << u[i][j] << std::endl;
+                    std::cout << "\n" << std::endl;
+                }
         }
 #else
     // Create spatial grids
