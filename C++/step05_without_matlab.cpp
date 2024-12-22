@@ -10,7 +10,7 @@
 const int X = 31;                         // Number of points along X-axis
 const int Y = 31;                         // Number of points along Y-axis
 static float x[X], y[X];
-static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y];
+static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y], u_not[X][Y];
 
 //std::vector<std::vector<double>> u(X, std::vector<double>(Y)), un(X, std::vector<double>(Y));
 //std::vector<std::vector<double>> nX(X, std::vector<double>(Y)), nY(X, std::vector<double>(Y));
@@ -73,10 +73,47 @@ int main() {
         #pragma omp parallel for simd
         for (int i = 0; i < Y; i++) u[X-1][i] = 1.;
 
+
+        //not parallel
+        for (int i = 0; i < X; i++)
+            x[i] = (2 * i) / (X - 1.0);
+
+        for (int i = 0; i < Y; i++)
+            y[i] = (2 * i) / (Y - 1.0);
+
+        for (int i = 0; i < X; ++i) {
+            for (int j = 0; j < Y; ++j) {
+                nX[i][j] = x[i];
+                nY[i][j] = y[j];
+            }
+        }
+
         for (int i = 0; i < X; i++) {
             for (int j = 0; j < Y; j++)
-                std::cout << u[i][j];
+                u[i][j] = ((x[i] >= 0.5 && x[i] <= 1) && (y[j] >= 0.5 && y[j] <= 1)) ? 2.0 : 1.0;
         }
+
+
+        // Time-stepping loop
+        for (int n = 0; n < T; n++) {
+            std::copy(&u[0][0], &u[0][0] + X * Y, &un[0][0]);
+
+            for (int i = 1; i < X - 1; i++) {
+                for (int j = 1; j < Y - 1; j++)
+                    u[i][j] = un[i][j] - c * (un[i][j] - un[i - 1][j]) * dt / dx - c * (un[i][j] - un[i][j - 1]) * dt / dx;
+            }
+
+            // Boundary conditions
+            for (int i = 0; i < Y; i++) u[i][0] = 1.;
+            for (int i = 0; i < X; i++) u[0][i] = 1.;
+
+            for (int i = 0; i < X; i++) u[i][Y - 1] = 1.;
+            for (int i = 0; i < Y; i++) u[X - 1][i] = 1.;
+
+            for (int i = 0; i < X; i++) {
+                for (int j = 0; j < Y; j++)
+                    std::cout << u[i][j];
+            }
 #else
     // Create spatial grids
     for (int i = 0; i < X; i++)
@@ -94,29 +131,29 @@ int main() {
 
     for (int i = 0; i < X; i++) {
         for (int j = 0; j < Y; j++)
-            u[i][j] = ((x[i] >= 0.5 && x[i] <= 1) && (y[j] >= 0.5 && y[j] <= 1)) ? 2.0 : 1.0;
+            u_not[i][j] = ((x[i] >= 0.5 && x[i] <= 1) && (y[j] >= 0.5 && y[j] <= 1)) ? 2.0 : 1.0;
     }
 
 
     // Time-stepping loop
     for (int n = 0; n < T; n++) {
-        std::copy(&u[0][0], &u[0][0] + X * Y, &un[0][0]);
+        std::copy(&u_not[0][0], &u_not[0][0] + X * Y, &un[0][0]);
 
         for (int i = 1; i < X - 1; i++) {
             for (int j = 1; j < Y - 1; j++)
-                u[i][j] = un[i][j] - c * (un[i][j] - un[i - 1][j]) * dt / dx - c * (un[i][j] - un[i][j - 1]) * dt / dx;
+                u_not[i][j] = un[i][j] - c * (un[i][j] - un[i - 1][j]) * dt / dx - c * (un[i][j] - un[i][j - 1]) * dt / dx;
         }
 
         // Boundary conditions
-        for (int i = 0; i < Y; i++) u[i][0] = 1.;
-        for (int i = 0; i < X; i++) u[0][i] = 1.;
+        for (int i = 0; i < Y; i++) u_not[i][0] = 1.;
+        for (int i = 0; i < X; i++) u_not[0][i] = 1.;
 
-        for (int i = 0; i < X; i++) u[i][Y - 1] = 1.;
-        for (int i = 0; i < Y; i++) u[X - 1][i] = 1.;
+        for (int i = 0; i < X; i++) u_not[i][Y - 1] = 1.;
+        for (int i = 0; i < Y; i++) u_not[X - 1][i] = 1.;
 
     for (int i = 0; i < X; i++) {
         for (int j = 0; j < Y; j++)
-            std::cout << u[i][j];
+            if (u_not[i][j] != u[i][j]) std::cout << "not equal" << std::endl;
     }
 #endif
     }
