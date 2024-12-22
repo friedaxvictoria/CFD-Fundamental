@@ -27,52 +27,52 @@ int main() {
 
 #ifdef PARALLEL
     // Create spatial grids
-    #pragma omp parallel for simd
+#pragma omp parallel for simd
     for (int i = 0; i < X; i++)
         x[i] = (2 * i) / (X - 1.0);
 
-    #pragma omp parallel for simd
+#pragma omp parallel for simd
     for (int i = 0; i < Y; i++)
         y[i] = (2 * i) / (Y - 1.0);
 
-    #pragma omp parallel for simd collapse(2) 
+#pragma omp parallel for simd collapse(2) 
     for (int i = 0; i < X; ++i) {
         for (int j = 0; j < Y; ++j) {
-            nX[i][j] = x[i]; 
-            nY[i][j] = y[j]; 
+            nX[i][j] = x[i];
+            nY[i][j] = y[j];
         }
     }
 
     // no simd bc of i-else
-    #pragma omp parallel for collapse(2) 
-    for (int i = 0; i < X; i++){
+#pragma omp parallel for collapse(2) 
+    for (int i = 0; i < X; i++) {
         for (int j = 0; j < Y; j++)
-            u[i][j] = ((x[i] >= 0.5 && x[i] <= 1) && (y[j] >= 0.5 && y[j] <= 1)) ? 2.0 : 1.0;        
+            u[i][j] = ((x[i] >= 0.5 && x[i] <= 1) && (y[j] >= 0.5 && y[j] <= 1)) ? 2.0 : 1.0;
     }
 
- 
+
     // Time-stepping loop
     for (int n = 0; n < T; n++) {
         std::copy(&u[0][0], &u[0][0] + X * Y, &un[0][0]);
         //std::copy(std::begin(u), std::end(u), std::begin(un));
 
-        #pragma omp parallel for simd collapse(2) 
-        for (int i = 1; i < X-1; i++) {
-            for (int j = 1; j < Y-1; j++)
-                u[i][j] = un[i][j] - c * (un[i][j] - un[i-1][j]) * dt / dx - c * (un[i][j] - un[i][j-1]) * dt / dx;
+#pragma omp parallel for simd collapse(2) 
+        for (int i = 1; i < X - 1; i++) {
+            for (int j = 1; j < Y - 1; j++)
+                u[i][j] = un[i][j] - c * (un[i][j] - un[i - 1][j]) * dt / dx - c * (un[i][j] - un[i][j - 1]) * dt / dx;
         }
 
         // Boundary conditions
-        #pragma omp parallel for simd
+#pragma omp parallel for simd
         for (int i = 0; i < Y; i++) u[i][0] = 1.;
-        #pragma omp parallel for simd
+#pragma omp parallel for simd
         for (int i = 0; i < X; i++) u[0][i] = 1.;
 
-        #pragma omp parallel for simd
-        for (int i = 0; i < X; i++) u[i][Y-1] = 1.;
-        #pragma omp parallel for simd
-        for (int i = 0; i < Y; i++) u[X-1][i] = 1.;
-
+#pragma omp parallel for simd
+        for (int i = 0; i < X; i++) u[i][Y - 1] = 1.;
+#pragma omp parallel for simd
+        for (int i = 0; i < Y; i++) u[X - 1][i] = 1.;
+    }
 
         //not parallel
         for (int i = 0; i < X; i++)
@@ -155,8 +155,8 @@ int main() {
 
         for (int i = 0; i < X; i++) u[i][Y - 1] = 1.;
         for (int i = 0; i < Y; i++) u[X - 1][i] = 1.;
-    }
+ 
 #endif
-    
+}
     return 0;
 }
