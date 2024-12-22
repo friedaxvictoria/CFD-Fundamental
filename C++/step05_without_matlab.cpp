@@ -70,6 +70,11 @@ int main() {
         for (int i = 0; i < X; i++) u[i][Y-1] = 1.;
         #pragma omp parallel for simd
         for (int i = 0; i < Y; i++) u[X-1][i] = 1.;
+
+        for (int i = 0; i < X; i++) {
+            for (int j = 0; j < Y; j++)
+                std::cout << u[i][j];
+        }
 #else
     // Create spatial grids
     for (int i = 0; i < X; i++)
@@ -106,6 +111,11 @@ int main() {
 
         for (int i = 0; i < X; i++) u[i][Y - 1] = 1.;
         for (int i = 0; i < Y; i++) u[X - 1][i] = 1.;
+
+    for (int i = 0; i < X; i++) {
+        for (int j = 0; j < Y; j++)
+            std::cout << u[i][j];
+    }
 #endif
     }
     return 0;
