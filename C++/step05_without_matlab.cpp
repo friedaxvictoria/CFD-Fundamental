@@ -2,6 +2,9 @@
 #include <algorithm>
 #include <iostream>
 #include <cmath>
+#include <chrono>
+#include <omp.h>
+using namespace std::chrono;
 
 ////////////////////////////////////////////////////////////
 // Step 5: 2D Linear Convection
