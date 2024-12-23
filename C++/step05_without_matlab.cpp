@@ -75,12 +75,12 @@ for (int round = 0; round < num_rounds; round++) {
         }
 
         // Boundary conditions
-        #pragma omp parallel for simd
+        #pragma omp parallel for simd nowait
         for (int i = 0; i < Y; i++) u[i][0] = 1.;
-        #pragma omp parallel for simd
+        #pragma omp parallel for simd nowait
         for (int i = 0; i < X; i++) u[0][i] = 1.;
 
-        #pragma omp parallel for simd
+        #pragma omp parallel for simd nowait
         for (int i = 0; i < X; i++) u[i][Y - 1] = 1.;
         #pragma omp parallel for simd
         for (int i = 0; i < Y; i++) u[X - 1][i] = 1.;
