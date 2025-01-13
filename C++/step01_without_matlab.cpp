@@ -91,7 +91,6 @@ int main() {
                 plt::ylim(0.5, 2.5);
                 plt::pause(0.1);
         #endif
-            }
 
             /*
             for (int n = 0; n < T; n++) {
@@ -119,6 +118,7 @@ int main() {
             plt::show();
         #endif
         }
+    }
     std::cout << "average microseconds: " << sum_values/num_rounds << std::endl;
 
     return 0;
