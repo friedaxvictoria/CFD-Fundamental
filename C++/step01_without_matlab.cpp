@@ -17,7 +17,7 @@ namespace plt = matplotlibcpp;
 // Step 1: 1D Linear Convection
 ////////////////////////////////////////////////////////////
 const int X = 200000000;                    // Number of spatial points
-//static float x[X], u[X], un[X];
+//static double x[X], u[X], un[X];
 int main() {
     // Simulation parameters
     //const int X = 40;
@@ -57,12 +57,13 @@ int main() {
             }
 
             for (int n = 0; n < T; n++) {
-                std::copy(std::begin(u), std::end(u), std::begin(un));
+                //std::copy(std::begin(u), std::end(u), std::begin(un));
                 un = u;
                 #pragma omp parallel for simd
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
+            }
             #else
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
@@ -74,6 +75,7 @@ int main() {
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
+            }
             #endif
 
 
@@ -91,7 +93,6 @@ int main() {
                 plt::ylim(0.5, 2.5);
                 plt::pause(0.1);
         #endif
-            }
 
             /*
             for (int n = 0; n < T; n++) {
@@ -118,7 +119,8 @@ int main() {
         #ifdef MATPLOTLIB
             plt::show();
         #endif
-        }
+        
+    }
     std::cout << "average microseconds: " << sum_values/num_rounds << std::endl;
 
     return 0;
