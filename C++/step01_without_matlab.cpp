@@ -63,6 +63,7 @@ int main() {
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
+            }
             #else
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
@@ -74,6 +75,7 @@ int main() {
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
+            }
             #endif
 
 
@@ -117,7 +119,7 @@ int main() {
         #ifdef MATPLOTLIB
             plt::show();
         #endif
-        }
+        
     }
     std::cout << "average microseconds: " << sum_values/num_rounds << std::endl;
 
