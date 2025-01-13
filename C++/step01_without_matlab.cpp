@@ -16,20 +16,20 @@ namespace plt = matplotlibcpp;
 ////////////////////////////////////////////////////////////
 // Step 1: 1D Linear Convection
 ////////////////////////////////////////////////////////////
-const int X = 200000000;                    // Number of spatial points
-//static double x[X], u[X], un[X];
+const int X = 12000000;                    // Number of spatial points
+static double x[X], u[X], un[X];
 int main() {
     // Simulation parameters
     //const int X = 40;
     //const int T = 41;
-    const int T = 200;                    // Number of time steps
+    const int T = 2500;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
     const float dx = 2.0 / (X - 1);     // Spatial step size
     const float dt = 0.025;             // Time step size
 
     // Initialize spatial grid and initial condition
-    std::vector<double> x(X), u(X), un(X);
+    //std::vector<double> x(X), u(X), un(X);
     // 
     //float* x = (float*)malloc(X * sizeof(float));
     //float* u = (float*)malloc(X * sizeof(float));
@@ -57,8 +57,8 @@ int main() {
             }
 
             for (int n = 0; n < T; n++) {
-                //std::copy(std::begin(u), std::end(u), std::begin(un));
-                un = u;
+                std::copy(std::begin(u), std::end(u), std::begin(un));
+                //un = u;
                 #pragma omp parallel for simd
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
