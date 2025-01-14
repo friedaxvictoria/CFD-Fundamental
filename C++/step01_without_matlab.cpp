@@ -7,6 +7,8 @@
 #include <cstring>
 using namespace std::chrono;
 
+#define PARALLEL 1
+
 ////////////////////////////////////////////////////////////
 // Step 1: 1D Linear Convection
 ////////////////////////////////////////////////////////////
@@ -66,6 +68,18 @@ int main() {
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
             }
 
+            for (int i = 0; i < X; i++) {
+                x2[i] = (5.0 * i) / (X - 1);
+                u2[i] = (x2[i] >= 0.5 && x2[i] <= 1) ? 2 : 1;
+            }
+
+            for (int i = 0; i < X; i++) {
+                std::cout << u[i] << std::endl;
+                std::cout << u2[i] << std::endl;
+                if (u[i] != u2[i])
+                    std::cout << "u is unequal" << std::endl;
+            }
+
             for (int n = 0; n < T; n++) {
                 //std::copy(std::begin(u), std::end(u), std::begin(un));
                 //std::copy(u, u + X, un);
@@ -76,12 +90,7 @@ int main() {
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
-            
-
-            for (int i = 0; i < X; i++) {
-                x2[i] = (5.0 * i) / (X - 1);
-                u2[i] = (x2[i] >= 0.5 && x2[i] <= 1) ? 2 : 1;
-            }
+        
 
             // Time-stepping loop
             for (int n = 0; n < T; n++) {
@@ -120,12 +129,6 @@ int main() {
                 }
             }
 */
-            for (int i = 0; i < X; i++) {
-                std::cout << u[i] << std::endl;
-                std::cout << u2[i] << std::endl;
-                if (u[i] != u2[i])
-                    std::cout << "u is unequal" << std::endl;
-            }
              
 
             auto stop = high_resolution_clock::now();
