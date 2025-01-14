@@ -82,9 +82,9 @@ int main() {
 
 
             for (int i = 0; i < X; i++) {
-        x[i] = (5.0 * i) / (X - 1);
-        u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
-    }
+                x2[i] = (5.0 * i) / (X - 1);
+                u2[i] = (x2[i] >= 0.5 && x2[i] <= 1) ? 2 : 1;
+            }
             // Time-stepping loop
             for (int n = 0; n < T; n++) {
                 un2 = u2;
