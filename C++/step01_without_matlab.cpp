@@ -22,9 +22,9 @@ int main() {
     // Simulation parameters
     //const int X = 40;
     //const int T = 41;
-    float *x = (float *) malloc(sizeof(float)*X);
-    float *u = (float *) malloc(sizeof(float)*X);
-    float *un = (float *) malloc(sizeof(float)*X);
+    float *x = (float *) std::malloc(sizeof(float)*X);
+    float *u = (float *) std::malloc(sizeof(float)*X);
+    float *un = (float *) std::malloc(sizeof(float)*X);
     //float (*x) = malloc (sizeof(*array) * X);
     const int T = 200;                    // Number of time steps
     const int c = 1;                     // Wave speed
@@ -63,7 +63,7 @@ int main() {
             for (int n = 0; n < T; n++) {
                 //std::copy(std::begin(u), std::end(u), std::begin(un));
                 //un = u;
-                memcpy(un, u, sizeof(float) * X);
+                std::memcpy(un, u, sizeof(float) * X);
                 #pragma omp parallel for simd schedule(static, X/64)
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
@@ -77,7 +77,7 @@ int main() {
             for (int n = 0; n < T; n++) {
                 //std::copy(std::begin(u), std::end(u), std::begin(un));
                 //un = u;
-                memcpy(un, u, sizeof(float) * X);
+                std::memcpy(un, u, sizeof(float) * X);
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
