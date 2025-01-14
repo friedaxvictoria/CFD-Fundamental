@@ -71,13 +71,14 @@ int main() {
             for (int n = 0; n < T; n++) {
                 //std::copy(std::begin(u), std::end(u), std::begin(un));
                 //std::copy(u, u + X, un);
-                tmp = un;
-                un = u;
-                u = tmp;
+
                 #pragma omp parallel for simd schedule(static, chunk_size)
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
+                tmp = un;
+                un = u;
+                u = tmp;
             }
 
 
