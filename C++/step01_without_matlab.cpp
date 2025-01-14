@@ -53,7 +53,7 @@ int main() {
 
             //not good with simd bc of implied if statement? should you split into two loops?
             #ifdef PARALLEL
-            #pragma omp parallel for simd schedule(static)
+            #pragma omp parallel for simd schedule(static, chunk_size)
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
             }
@@ -69,7 +69,7 @@ int main() {
                 tmp = un;
                 un = u;
                 u = tmp;
-                #pragma omp parallel for simd schedule(static)
+                #pragma omp parallel for simd schedule(static, chunk_size)
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
