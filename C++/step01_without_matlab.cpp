@@ -43,13 +43,15 @@ int main() {
     int sum_values = 0;
     int num_rounds = 10;
 
+    int chunk_size = 0;
+
     #ifdef PARALLEL
     #pragma omp parallel
     {
         #pragma omp single
         {
             int num_threads = omp_get_num_threads(); // Number of threads
-            int chunk_size = X / num_threads; // Calculate chunk size
+            chunk_size = X / num_threads; // Calculate chunk size
         }
     }
     #endif
