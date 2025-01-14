@@ -21,7 +21,7 @@ int main() {
     //float *x = new float[X];
     //float *u = new float[X];
     //float *un = new float[X];
-    const int T = 10;                    // Number of time steps
+    const int T = 2;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
     const float dx = 2.0 / (X - 1);     // Spatial step size
@@ -36,7 +36,7 @@ int main() {
     std::vector<double> x2(X), u2(X), un2(X);
 
     int sum_values = 0;
-    int num_rounds = 10;
+    int num_rounds = 1;
 
     int chunk_size = 0;
 
