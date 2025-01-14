@@ -10,7 +10,7 @@ using namespace std::chrono;
 ////////////////////////////////////////////////////////////
 // Step 1: 1D Linear Convection
 ////////////////////////////////////////////////////////////
-const int X = 2000000000;                    // Number of spatial points
+const int X = 200000000;                    // Number of spatial points
 static float x[X], u[X], un[X];
 int main() {
     // Simulation parameters
