@@ -69,11 +69,6 @@ int main() {
             }
 
             for (int i = 0; i < X; i++) {
-                x2[i] = (5.0 * i) / (X - 1);
-                u2[i] = (x2[i] >= 0.5 && x2[i] <= 1) ? 2 : 1;
-            }
-
-            for (int i = 0; i < X; i++) {
                 std::cout << u[i] << std::endl;
                 std::cout << u2[i] << std::endl;
                 if (u[i] != u2[i])
@@ -92,6 +87,9 @@ int main() {
                 }
         
 
+
+            }
+
             // Time-stepping loop
             for (int n = 0; n < T; n++) {
                 un2 = u2;
@@ -100,6 +98,9 @@ int main() {
                     u2[i] = un2[i] - c * (un2[i] - un2[i-1]) * dt / dx;
                 }
             }
+            for (int i = 0; i < X; i++) {
+                x2[i] = (5.0 * i) / (X - 1);
+                u2[i] = (x2[i] >= 0.5 && x2[i] <= 1) ? 2 : 1;
             }
             #else
             for (int i = 0; i < X; i++) {
