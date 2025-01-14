@@ -23,10 +23,9 @@ int main() {
     // Simulation parameters
     //const int X = 40;
     //const int T = 41;
-    float *x = (float *) std::malloc(sizeof(float)*X);
-    float *u = (float *) std::malloc(sizeof(float)*X);
-    float *un = (float *) std::malloc(sizeof(float)*X);
-    //float (*x) = malloc (sizeof(*array) * X);
+    float *x = new float[X];
+    float *u = new float[X];
+    float *un = new float[X];
     const int T = 2500;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
@@ -44,6 +43,17 @@ int main() {
     int sum_values = 0;
     int num_rounds = 10;
 
+    #ifdef PARALLEL
+    #pragma omp parallel
+    {
+        #pragma omp single
+        {
+            int num_threads = omp_get_num_threads(); // Number of threads
+            int chunk_size = X / num_threads; // Calculate chunk size
+        }
+    }
+    #endif
+
 
     for (int round = 0; round < num_rounds; round++) {
 
@@ -51,7 +61,7 @@ int main() {
 
             //not good with simd bc of implied if statement? should you split into two loops?
             #ifdef PARALLEL
-            #pragma omp parallel for simd schedule(static, X/64)
+            #pragma omp parallel for simd schedule(static, chunk_size)
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
             }
@@ -65,7 +75,7 @@ int main() {
                 //std::copy(std::begin(u), std::end(u), std::begin(un));
                 //un = u;
                 std::memcpy(&un, &u, sizeof(float) * X);
-                #pragma omp parallel for simd schedule(static, X/64)
+                #pragma omp parallel for simd schedule(static, chunk_size)
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
