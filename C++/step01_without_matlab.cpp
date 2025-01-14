@@ -7,6 +7,7 @@
 #include <iostream>
 #include <chrono>
 #include <omp.h>
+#include <cstring>
 using namespace std::chrono;
 
 #ifdef MATPLOTLIB
