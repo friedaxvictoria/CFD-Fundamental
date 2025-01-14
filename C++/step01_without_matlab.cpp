@@ -14,8 +14,6 @@ const int X = 200000000;                    // Number of spatial points
 static float x[X], u[X], un[X];
 int main() {
     // Simulation parameters
-    //const int X = 40;
-    //const int T = 41;
     //float *x = new float[X];
     //float *u = new float[X];
     //float *un = new float[X];
@@ -26,11 +24,10 @@ int main() {
     const float dt = 0.025;             // Time step size
 
     // Initialize spatial grid and initial condition
-    //std::vector<double> x(X), u(X), un(X);
-    // 
-    //float* x = (float*)malloc(X * sizeof(float));
-    //float* u = (float*)malloc(X * sizeof(float));
-    //float* un = (float*)malloc(X * sizeof(float));
+    float* x = (float*)malloc(X * sizeof(float));
+    float* u = (float*)malloc(X * sizeof(float));
+    float* un = (float*)malloc(X * sizeof(float));
+    float* tmp = (float*)malloc(X * sizeof(float));
     //double testun[X], testu[X];
 
     int sum_values = 0;
@@ -67,8 +64,11 @@ int main() {
             }
 
             for (int n = 0; n < T; n++) {
-                std::copy(std::begin(u), std::end(u), std::begin(un));
+                //std::copy(std::begin(u), std::end(u), std::begin(un));
                 //std::copy(u, u + X, un);
+                tmp = un;
+                un = u;
+                u = tmp;
                 #pragma omp parallel for simd schedule(static, chunk_size)
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
@@ -80,8 +80,11 @@ int main() {
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
             }
             for (int n = 0; n < T; n++) {
-                std::copy(std::begin(u), std::end(u), std::begin(un));
+                //std::copy(std::begin(u), std::end(u), std::begin(un));
                 //std::copy(u, u + X, un);
+                tmp = un;
+                un = u;
+                u = tmp;
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
