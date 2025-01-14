@@ -13,7 +13,7 @@ using namespace std::chrono;
 //const int X = 200000000;                    // Number of spatial points
 const int X = 20;                    // Number of spatial points
 
-static float x[X], u[X], un[X];
+//static float x[X], u[X], un[X];
 int main() {
     // Simulation parameters
     //float *x = new float[X];
@@ -26,10 +26,10 @@ int main() {
     const float dt = 0.025;             // Time step size
 
     // Initialize spatial grid and initial condition
-    //float* x = (float*)malloc(X * sizeof(float));
-    //float* u = (float*)malloc(X * sizeof(float));
-    //float* un = (float*)malloc(X * sizeof(float));
-    //float* tmp = (float*)malloc(X * sizeof(float));
+    float* x = (float*)malloc(X * sizeof(float));
+    float* u = (float*)malloc(X * sizeof(float));
+    float* un = (float*)malloc(X * sizeof(float));
+    float* tmp = (float*)malloc(X * sizeof(float));
     
     std::vector<double> x2(X), u2(X), un2(X);
 
@@ -67,11 +67,11 @@ int main() {
             }
 
             for (int n = 0; n < T; n++) {
-                std::copy(std::begin(u), std::end(u), std::begin(un));
+                //std::copy(std::begin(u), std::end(u), std::begin(un));
                 //std::copy(u, u + X, un);
-                //tmp = un;
-                //un = u;
-                //u = tmp;
+                tmp = un;
+                un = u;
+                u = tmp;
                 #pragma omp parallel for simd schedule(static, chunk_size)
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
@@ -100,9 +100,9 @@ int main() {
             for (int n = 0; n < T; n++) {
                 //std::copy(std::begin(u), std::end(u), std::begin(un));
                 //std::copy(u, u + X, un);
-                //tmp = un;
-                //un = u;
-                //u = tmp;
+                tmp = un;
+                un = u;
+                u = tmp;
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
