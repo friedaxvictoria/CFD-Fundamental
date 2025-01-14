@@ -10,16 +10,16 @@ using namespace std::chrono;
 ////////////////////////////////////////////////////////////
 // Step 1: 1D Linear Convection
 ////////////////////////////////////////////////////////////
-const int X = 12000000;                    // Number of spatial points
-//static float x[X], u[X], un[X];
+const int X = 2000000000;                    // Number of spatial points
+static float x[X], u[X], un[X];
 int main() {
     // Simulation parameters
     //const int X = 40;
     //const int T = 41;
-    float *x = new float[X];
-    float *u = new float[X];
-    float *un = new float[X];
-    const int T = 2500;                    // Number of time steps
+    //float *x = new float[X];
+    //float *u = new float[X];
+    //float *un = new float[X];
+    const int T = 200;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
     const float dx = 2.0 / (X - 1);     // Spatial step size
@@ -67,8 +67,8 @@ int main() {
             }
 
             for (int n = 0; n < T; n++) {
-                //std::copy(std::begin(u), std::end(u), std::begin(un));
-                std::copy(u, u + X, un);
+                std::copy(std::begin(u), std::end(u), std::begin(un));
+                //std::copy(u, u + X, un);
                 #pragma omp parallel for simd schedule(static, chunk_size)
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
@@ -80,8 +80,8 @@ int main() {
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
             }
             for (int n = 0; n < T; n++) {
-                //std::copy(std::begin(u), std::end(u), std::begin(un));
-                std::copy(u, u + X, un);
+                std::copy(std::begin(u), std::end(u), std::begin(un));
+                //std::copy(u, u + X, un);
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
