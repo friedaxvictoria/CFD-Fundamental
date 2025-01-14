@@ -74,7 +74,8 @@ int main() {
                 tmp = un;
                 un = u;
                 u = tmp;
-                #pragma omp parallel for 
+                u[0] = un[0];
+                #pragma omp parallel for simd schedule(static, chunk_size)
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
