@@ -121,8 +121,8 @@ int main() {
             }
 */
             for (int i = 0; i < X; i++) {
-                //std::cout << u[i] << std::endl;
-                //std::cout << u2[i] << std::endl;
+                std::cout << u[i] << std::endl;
+                std::cout << u2[i] << std::endl;
                 if (u[i] != u2[i])
                     std::cout << "u is unequal" << std::endl;
             }
