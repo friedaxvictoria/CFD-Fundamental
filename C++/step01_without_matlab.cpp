@@ -50,8 +50,6 @@ int main() {
                 chunk_size_avx = chunk_size -(int)(256/32) + remainder;
             else
                 chunk_size_avx = chunk_size;
-
-            std::cout<<chunk_size_avx<<std::endl;
         }
     }
     #endif
@@ -68,7 +66,7 @@ int main() {
                 x[i] = (5.0 * i) / (X - 1);
             }
 
-            #pragma omp parallel for schedule(guided)
+            #pragma omp parallel for schedule(static, chunk_size_avx)
             for (int i = 0; i < X; i++) {
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
             }
@@ -96,7 +94,6 @@ int main() {
                     std::cout << "u is unequal" << std::endl;
             }*/
             #else
-            std::cout<<"not parallel"<<std::endl;
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
