@@ -7,8 +7,6 @@
 #include <cstring>
 using namespace std::chrono;
 
-#define PARALLEL 1
-
 ////////////////////////////////////////////////////////////
 // Step 1: 1D Linear Convection
 ////////////////////////////////////////////////////////////
@@ -32,10 +30,10 @@ int main() {
     float* un = (float*)malloc(X * sizeof(float));
     float* tmp = (float*)malloc(X * sizeof(float));
     
-    std::vector<double> x2(X), u2(X), un2(X);
+    //std::vector<double> x2(X), u2(X), un2(X);
 
     int sum_values = 0;
-    int num_rounds = 1;
+    int num_rounds = 10;
 
     int chunk_size = 0;
 
@@ -47,9 +45,9 @@ int main() {
             int num_threads = omp_get_num_threads(); // Number of threads
             chunk_size = std::max(1,X / num_threads); // Calculate chunk size
 
-            int remainder = chunk_size % (512/32);
+            int remainder = chunk_size % (int)(512/32);
 
-            chunk_size = chunk_size - (512/32) + remainder;
+            chunk_size = chunk_size -(int)(512/32) + remainder;
         }
     }
     #endif
