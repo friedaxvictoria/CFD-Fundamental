@@ -62,8 +62,6 @@ int main() {
         auto start = high_resolution_clock::now();
 
             #ifdef PARALLEL
-            std::cout<<X<<std::endl;
-
             #pragma omp parallel for simd schedule(static, chunk_size_avx)
             //#pragma omp simd
             for (int i = 0; i < X; i++) {
@@ -98,6 +96,7 @@ int main() {
                     std::cout << "u is unequal" << std::endl;
             }*/
             #else
+            std::cout<<"not parallel"<<std::endl;
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
