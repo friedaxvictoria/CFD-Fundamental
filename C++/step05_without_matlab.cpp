@@ -12,14 +12,21 @@ using namespace std::chrono;
 
 const int X = 10000;                         // Number of points along X-axis
 const int Y = 10000;                         // Number of points along Y-axis
-static float x[X], y[X];
-static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y];
+//static float x[X], y[X];
+//static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y];
 
 //std::vector<std::vector<double>> u(X, std::vector<double>(Y)), un(X, std::vector<double>(Y));
 //std::vector<std::vector<double>> nX(X, std::vector<double>(Y)), nY(X, std::vector<double>(Y));
 
 int main() {
     // Define simulation parameters
+    float* x = (float*)malloc(X * sizeof(float));
+    float* y = (float*)malloc(X * sizeof(float));
+    float* nX = (float*)malloc(X*Y * sizeof(float));
+    float* nY = (float*)malloc(X*Y * sizeof(float));
+    float* u = (float*)malloc(X*Y * sizeof(float));
+    float* un = (float*)malloc(X*Y * sizeof(float));
+    float* tmp = (float*)malloc(X*Y * sizeof(float));
 
     const int T = 250;                         // Total number of time steps
 
@@ -29,7 +36,24 @@ int main() {
     const double dt = 0.2 * dx;               // Time step size
 
     int sum_values = 0;
-    int num_rounds = 5;
+    int num_rounds = 10;
+
+    int chunk_size = 0;
+    
+    #ifdef PARALLEL
+    #pragma omp parallel
+    {
+        #pragma omp single
+        {
+            int num_threads = omp_get_num_threads(); // Number of threads
+            chunk_size = std::max(1,X / num_threads); // Calculate chunk size
+
+            //int remainder = chunk_size % (int)(512/32);
+
+            //chunk_size = chunk_size -(int)(512/32) + remainder;
+        }
+    }
+    #endif
 
 
 for (int round = 0; round < num_rounds; round++) {
@@ -37,53 +61,67 @@ for (int round = 0; round < num_rounds; round++) {
 
     #ifdef PARALLEL
     // Create spatial grids
-    #pragma omp parallel for simd
+    #pragma omp parallel for simd schedule(static, chunk_size)
     for (int i = 0; i < X; i++)
         x[i] = (2 * i) / (X - 1.0);
 
-    #pragma omp parallel for simd
+    #pragma omp parallel for simd schedule(static, chunk_size)
     for (int i = 0; i < Y; i++)
         y[i] = (2 * i) / (Y - 1.0);
 
-    #pragma omp parallel for
+    #pragma omp parallel for schedule(static, chunk_size)
     for (int i = 0; i < X; ++i) {
         #pragma omp simd
         for (int j = 0; j < Y; ++j) {
-            nX[i][j] = x[i];
-            nY[i][j] = y[j];
+            int idx = i*X+j;
+            nX[idx] = x[i];
+            nY[idx] = y[j];
         }
     }
 
     // no simd bc of i-else
-    #pragma omp parallel for collapse(2) 
+    #pragma omp parallel for collapse(2) schedule(guided)
     for (int i = 0; i < X; i++) {
-        for (int j = 0; j < Y; j++)
-            u[i][j] = ((x[i] >= 0.5 && x[i] <= 1) && (y[j] >= 0.5 && y[j] <= 1)) ? 2.0 : 1.0;
+        for (int j = 0; j < Y; j++){
+            int index = i*X+j;
+            u[idx] = ((x[i] >= 0.5 && x[i] <= 1) && (y[j] >= 0.5 && y[j] <= 1)) ? 2.0 : 1.0;
+        }
     }
 
 
     // Time-stepping loop
     for (int n = 0; n < T; n++) {
-        std::copy(&u[0][0], &u[0][0] + X * Y, &un[0][0]);
+        //std::copy(&u[0][0], &u[0][0] + X * Y, &un[0][0]);
         //std::copy(std::begin(u), std::end(u), std::begin(un));
 
-        #pragma omp parallel for
+        tmp = un;
+        un = u;
+        u = tmp;
+
+        #pragma omp parallel for simd schedule(static, chunk_size)
+        for (int i = 0; i < X; i++) u[i*X] = un[i*X];
+        #pragma omp parallel for simd schedule(static, chunk_size)
+        for (int i = 0; i < Y; i++) u[i] = un[i*X];
+
+        #pragma omp parallel for schedule(static, chunk_size)
         for (int i = 1; i < X - 1; i++) {
             #pragma omp simd
-            for (int j = 1; j < Y - 1; j++)
-                u[i][j] = un[i][j] - c * (un[i][j] - un[i - 1][j]) * dt / dx - c * (un[i][j] - un[i][j - 1]) * dt / dx;
+            for (int j = 1; j < Y - 1; j++){
+                int index = i*X+j;
+                u[idx] = un[idx] - c * (un[idx] - un[(i-1)*X+j]) * dt / dx - c * (un[idx] - un[idx-1]) * dt / dx;
+            }
         }
 
         // Boundary conditions
-#pragma omp parallel for simd 
-            for (int i = 0; i < Y; i++) u[i][0] = 1.;
-#pragma omp parallel for simd 
-            for (int i = 0; i < X; i++) u[0][i] = 1.;
+        #pragma omp parallel for simd schedule(static, chunk_size)
+        for (int i = 0; i < X; i++) u[i*X] = 1.;
+        #pragma omp parallel for simd schedule(static, chunk_size)
+        for (int i = 0; i < Y; i++) u[i] = 1.;
 
-#pragma omp parallel for simd 
-            for (int i = 0; i < X; i++) u[i][Y - 1] = 1.;
-#pragma omp parallel for simd
-            for (int i = 0; i < Y; i++) u[X - 1][i] = 1.;
+        #pragma omp parallel for simd schedule(static, chunk_size)
+        for (int i = 0; i < X; i++) u[i*X+(Y - 1)] = 1.;
+        #pragma omp parallel for simd schedule(static, chunk_size)
+        for (int i = 0; i < Y; i++) u[X*(X - 1)+i] = 1.;
     }
 
     #else
@@ -96,32 +134,43 @@ for (int round = 0; round < num_rounds; round++) {
 
     for (int i = 0; i < X; ++i) {
         for (int j = 0; j < Y; ++j) {
-            nX[i][j] = x[i];
-            nY[i][j] = y[j];
+            int idx = i*X+j;
+            nX[idx] = x[i];
+            nY[idx] = y[j];
         }
     }
 
+    // no simd bc of i-else
     for (int i = 0; i < X; i++) {
-        for (int j = 0; j < Y; j++)
-            u[i][j] = ((x[i] >= 0.5 && x[i] <= 1) && (y[j] >= 0.5 && y[j] <= 1)) ? 2.0 : 1.0;
+        for (int j = 0; j < Y; j++){
+            int idx = i*X+j;
+            u[idx] = ((x[i] >= 0.5 && x[i] <= 1) && (y[j] >= 0.5 && y[j] <= 1)) ? 2.0 : 1.0;
+        }
     }
 
 
     // Time-stepping loop
     for (int n = 0; n < T; n++) {
-        std::copy(&u[0][0], &u[0][0] + X * Y, &un[0][0]);
+        tmp = un;
+        un = u;
+        u = tmp;
+
+        for (int i = 0; i < X; i++) u[i*X] = un[i*X];
+        for (int i = 0; i < Y; i++) u[i] = un[i*X];
 
         for (int i = 1; i < X - 1; i++) {
-            for (int j = 1; j < Y - 1; j++)
-                u[i][j] = un[i][j] - c * (un[i][j] - un[i - 1][j]) * dt / dx - c * (un[i][j] - un[i][j - 1]) * dt / dx;
+            for (int j = 1; j < Y - 1; j++){
+                int idx = i*X+j;
+                u[idx] = un[idx] - c * (un[idx] - un[(i-1)*X+j]) * dt / dx - c * (un[idx] - un[idx-1]) * dt / dx;
+            }
         }
 
         // Boundary conditions
-        for (int i = 0; i < Y; i++) u[i][0] = 1.;
-        for (int i = 0; i < X; i++) u[0][i] = 1.;
+        for (int i = 0; i < X; i++) u[i*X] = 1.;
+        for (int i = 0; i < Y; i++) u[i] = 1.;
 
-        for (int i = 0; i < X; i++) u[i][Y - 1] = 1.;
-        for (int i = 0; i < Y; i++) u[X - 1][i] = 1.;
+        for (int i = 0; i < X; i++) u[i*X+(Y - 1)] = 1.;
+        for (int i = 0; i < Y; i++) u[X*(X - 1)+i] = 1.;
     }
     #endif
     auto stop = high_resolution_clock::now();
