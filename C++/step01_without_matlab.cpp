@@ -10,7 +10,7 @@ using namespace std::chrono;
 ////////////////////////////////////////////////////////////
 // Step 1: 1D Linear Convection
 ////////////////////////////////////////////////////////////
-const int X = 200'000'000;                    // Number of spatial points
+const int X = 300'000'000;                    // Number of spatial points
 
 //static float x[X], u[X], un[X];
 int main() {
@@ -21,8 +21,9 @@ int main() {
     const float dx = 2.0 / (X - 1);     // Spatial step size
     const float dt = 0.025;             // Time step size
 
+    float x = 0;    // for temporary calculations
+
     // Initialize spatial grid and initial condition
-    float* x = (float*)malloc(X * sizeof(float));
     float* u = (float*)malloc(X * sizeof(float));
     float* un = (float*)malloc(X * sizeof(float));
     float* tmp = (float*)malloc(X * sizeof(float));
@@ -57,15 +58,10 @@ int main() {
         auto start = high_resolution_clock::now();
 
             #ifdef PARALLEL
-            #pragma omp parallel for simd schedule(static, chunk_size)
-            //#pragma omp simd
-            for (int i = 0; i < X; i++) {
-                x[i] = (5.0 * i) / (X - 1);
-            }
-
             #pragma omp parallel for schedule(guided)
             for (int i = 0; i < X; i++) {
-                u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
+                float x = (5.0 * i) / (X - 1);
+                u[i] = (x >= 0.5 && x <= 1) ? 2 : 1;
             }
 
             for (int n = 0; n < T; n++) {
@@ -92,8 +88,8 @@ int main() {
             }*/
             #else
             for (int i = 0; i < X; i++) {
-                x[i] = (5.0 * i) / (X - 1);
-                u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
+                x = (5.0 * i) / (X - 1);
+                u[i] = (x >= 0.5 && x <= 1) ? 2 : 1;
             }
             for (int n = 0; n < T; n++) {
                 //std::copy(std::begin(u), std::end(u), std::begin(un));
