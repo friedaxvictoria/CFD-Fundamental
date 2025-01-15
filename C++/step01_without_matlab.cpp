@@ -45,9 +45,10 @@ int main() {
             int num_threads = omp_get_num_threads(); // Number of threads
             chunk_size = std::max(1,X / num_threads); // Calculate chunk size
 
-            //int remainder = chunk_size % (int)(512/32);
+            //bc romeo has avx
+            int remainder = chunk_size % (int)(256/32);
 
-            //chunk_size = chunk_size -(int)(512/32) + remainder;
+            chunk_size = chunk_size -(int)(256/32) + remainder;
         }
     }
     #endif
