@@ -12,8 +12,7 @@ using namespace std::chrono;
 ////////////////////////////////////////////////////////////
 // Step 1: 1D Linear Convection
 ////////////////////////////////////////////////////////////
-//const int X = 200000000;                    // Number of spatial points
-const int X = 20;                    // Number of spatial points
+const int X = 200000000;                    // Number of spatial points
 
 //static float x[X], u[X], un[X];
 int main() {
@@ -21,7 +20,7 @@ int main() {
     //float *x = new float[X];
     //float *u = new float[X];
     //float *un = new float[X];
-    const int T = 20;                    // Number of time steps
+    const int T = 200;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
     const float dx = 2.0 / (X - 1);     // Spatial step size
@@ -47,6 +46,10 @@ int main() {
         {
             int num_threads = omp_get_num_threads(); // Number of threads
             chunk_size = std::max(1,X / num_threads); // Calculate chunk size
+
+            int remainder = chunk_size % (512/32);
+
+            chunk_size = chunk_size - (512/32) + remainder;
         }
     }
     #endif
@@ -82,24 +85,13 @@ int main() {
             }
 
 
-            for (int i = 0; i < X; i++) {
-                x2[i] = (5.0 * i) / (X - 1);
-                u2[i] = (x2[i] >= 0.5 && x2[i] <= 1) ? 2 : 1;
-            }
-            // Time-stepping loop
-            for (int n = 0; n < T; n++) {
-                un2 = u2;
-
-                for (int i = 1; i < X; i++) {
-                    u2[i] = un2[i] - c * (un2[i] - un2[i-1]) * dt / dx;
-                }
-            }
+            /*
             for (int i = 0; i < X; i++) {
                 std::cout << u[i] << std::endl;
                 std::cout << u2[i] << std::endl;
                 if (u[i] != u2[i])
                     std::cout << "u is unequal" << std::endl;
-            }
+            }*/
             #else
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
