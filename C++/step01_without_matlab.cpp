@@ -46,7 +46,10 @@ int main() {
             //bc romeo has avx
             int remainder = chunk_size % (int)(256/32);
 
-            chunk_size_avx = chunk_size -(int)(256/32) + remainder;
+            if (remainder != 0)
+                chunk_size_avx = chunk_size -(int)(256/32) + remainder;
+            else
+                chunk_size_avx = chunk_size;
 
             std::cout<<chunk_size_avx<<std::endl;
         }
