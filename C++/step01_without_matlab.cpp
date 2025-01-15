@@ -10,7 +10,7 @@ using namespace std::chrono;
 ////////////////////////////////////////////////////////////
 // Step 1: 1D Linear Convection
 ////////////////////////////////////////////////////////////
-const int X = 200000000;                    // Number of spatial points
+const int X = 200'000'000;                    // Number of spatial points
 
 //static float x[X], u[X], un[X];
 int main() {
@@ -46,9 +46,9 @@ int main() {
             chunk_size = std::max(1,X / num_threads); // Calculate chunk size
 
             //bc romeo has avx
-            int remainder = chunk_size % (int)(256/32);
+            //int remainder = chunk_size % (int)(256/32);
 
-            chunk_size = chunk_size -(int)(256/32) + remainder;
+            //chunk_size = chunk_size -(int)(256/32) + remainder;
         }
     }
     #endif
