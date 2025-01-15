@@ -45,10 +45,9 @@ int main() {
             int num_threads = omp_get_num_threads(); // Number of threads
             chunk_size = std::max(1,X / num_threads); // Calculate chunk size
 
-            int remainder = chunk_size % (int)(512/32);
+            //int remainder = chunk_size % (int)(512/32);
 
-            chunk_size = chunk_size -(int)(512/32) + remainder;
-            chunk_size = (512/32);
+            //chunk_size = chunk_size -(int)(512/32) + remainder;
         }
     }
     #endif
@@ -58,7 +57,6 @@ int main() {
 
         auto start = high_resolution_clock::now();
 
-            //not good with simd bc of implied if statement? should you split into two loops?
             #ifdef PARALLEL
             #pragma omp parallel for simd schedule(static, chunk_size)
             for (int i = 0; i < X; i++) {
