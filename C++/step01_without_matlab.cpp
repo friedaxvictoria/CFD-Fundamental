@@ -48,6 +48,7 @@ int main() {
             int remainder = chunk_size % (int)(512/32);
 
             chunk_size = chunk_size -(int)(512/32) + remainder;
+            chunk_size = (512/32);
         }
     }
     #endif
@@ -101,6 +102,7 @@ int main() {
                 tmp = un;
                 un = u;
                 u = tmp;
+                u[0] = un[0];
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
