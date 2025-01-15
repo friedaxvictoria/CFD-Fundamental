@@ -47,6 +47,8 @@ int main() {
             int remainder = chunk_size % (int)(256/32);
 
             chunk_size_avx = chunk_size -(int)(256/32) + remainder;
+
+            std::cout<<chunk_size_avx<<std::endl;
         }
     }
     #endif
@@ -57,6 +59,8 @@ int main() {
         auto start = high_resolution_clock::now();
 
             #ifdef PARALLEL
+            std::cout<<X<<std::endl;
+
             #pragma omp parallel for simd schedule(static, chunk_size_avx)
             //#pragma omp simd
             for (int i = 0; i < X; i++) {
