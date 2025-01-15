@@ -46,9 +46,9 @@ int main() {
             chunk_size = std::max(1,X / num_threads); // Calculate chunk size
 
             //bc romeo has avx
-            //int remainder = chunk_size % (int)(256/32);
+            int remainder = chunk_size % (int)(256/32);
 
-            //chunk_size = chunk_size -(int)(256/32) + remainder;
+            chunk_size = chunk_size -(int)(256/32) + remainder;
         }
     }
     #endif
