@@ -15,9 +15,6 @@ const int X = 200'000'000;                    // Number of spatial points
 //static float x[X], u[X], un[X];
 int main() {
     // Simulation parameters
-    //float *x = new float[X];
-    //float *u = new float[X];
-    //float *un = new float[X];
     const int T = 200;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
@@ -36,6 +33,7 @@ int main() {
     int num_rounds = 10;
 
     int chunk_size = 0;
+    int chunk_size_avx = 0;
 
     #ifdef PARALLEL
     #pragma omp parallel
@@ -48,7 +46,7 @@ int main() {
             //bc romeo has avx
             int remainder = chunk_size % (int)(256/32);
 
-            chunk_size = chunk_size -(int)(256/32) + remainder;
+            chunk_size_avx = chunk_size -(int)(256/32) + remainder;
         }
     }
     #endif
@@ -65,7 +63,7 @@ int main() {
                 x[i] = (5.0 * i) / (X - 1);
             }
 
-            #pragma omp parallel for schedule(guided)
+            #pragma omp parallel for schedule(guided,chunk_size)
             for (int i = 0; i < X; i++) {
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
             }
