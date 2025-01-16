@@ -10,9 +10,9 @@ using namespace std::chrono;
 // Step 5: 2D Linear Convection
 ////////////////////////////////////////////////////////////
 
-//test with X=Y=10000, T=200...X=Y=10000, T=200...X=Y=10000, T=200
-const int X = 10000;                         // Number of points along X-axis
-const int Y = 10000;                         // Number of points along Y-axis
+//test with X=Y=10000, T=250...X=Y=7000, T=500...X=Y=15000, T=125
+const int X = 7000;                         // Number of points along X-axis
+const int Y = 7000;                         // Number of points along Y-axis
 //static float x[X], y[X];
 //static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y];
 
@@ -26,7 +26,7 @@ int main() {
     float* un = (float*)malloc(X*Y * sizeof(float));
     float* tmp = (float*)malloc(X*Y * sizeof(float));
 
-    const int T = 250;                         // Total number of time steps
+    const int T = 500;                         // Total number of time steps
 
     const double  c = 1.;                     // Convection coefficient
     const double dx = 2. / (X - 1);           // Step size in the X direction
@@ -37,7 +37,6 @@ int main() {
     int num_rounds = 1;
 
     int chunk_size = 0;
-    int chunk_size_avx = 0;
     
     #ifdef PARALLEL
     #pragma omp parallel
@@ -46,13 +45,6 @@ int main() {
         {
             int num_threads = omp_get_num_threads(); // Number of threads
             chunk_size = std::max(1,X / num_threads); // Calculate chunk size
-
-            int remainder = chunk_size % (int)(256/32);
-
-            if (remainder != 0 and num_threads != 1)
-                chunk_size_avx = chunk_size -(int)(256/32) + remainder;
-            else
-                chunk_size_avx = chunk_size;
         }
     }
     #endif
