@@ -51,6 +51,8 @@ int main() {
                 chunk_size_avx = chunk_size -(int)(256/32) + remainder;
             else
                 chunk_size_avx = chunk_size;
+
+            chunk_size = 1;
         }
     }
     #endif
