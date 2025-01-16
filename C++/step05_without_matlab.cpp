@@ -62,15 +62,15 @@ for (int round = 0; round < num_rounds; round++) {
 
     #ifdef PARALLEL
     // Create spatial grids
-    #pragma omp parallel for simd schedule(static, chunk_size_avx)
+    #pragma omp parallel for simd schedule(static, chunk_size)
     for (int i = 0; i < X; i++)
         x[i] = (2 * i) / (X - 1.0);
 
-    #pragma omp parallel for simd schedule(static, chunk_size_avx)
+    #pragma omp parallel for simd schedule(static, chunk_size)
     for (int i = 0; i < Y; i++)
         y[i] = (2 * i) / (Y - 1.0);
 
-    #pragma omp parallel for schedule(static, chunk_size_avx)
+    #pragma omp parallel for schedule(static, chunk_size)
     for (int i = 0; i < X; ++i) {
         #pragma omp simd
         for (int j = 0; j < Y; ++j) {
@@ -80,7 +80,7 @@ for (int round = 0; round < num_rounds; round++) {
         }
     }
 
-    // no simd bc of i-else
+    // no simd bc of if-else
     #pragma omp parallel for collapse(2) schedule(guided)
     for (int i = 0; i < X; i++) {
         for (int j = 0; j < Y; j++){
@@ -89,19 +89,18 @@ for (int round = 0; round < num_rounds; round++) {
         }
     }
 
-
     // Time-stepping loop
     for (int n = 0; n < T; n++) {
         tmp = un;
         un = u;
         u = tmp;
 
-        #pragma omp parallel for simd schedule(static, chunk_size_avx)
+        #pragma omp parallel for simd schedule(static, chunk_size)
         for (int i = 0; i < X; i++) u[i*X] = un[i*X];
-        #pragma omp parallel for simd schedule(static, chunk_size_avx)
+        #pragma omp parallel for simd schedule(static, chunk_size)
         for (int i = 0; i < Y; i++) u[i] = un[i*X];
 
-        #pragma omp parallel for schedule(static, chunk_size_avx)
+        #pragma omp parallel for schedule(static, chunk_size)
         for (int i = 1; i < X - 1; i++) {
             #pragma omp simd
             for (int j = 1; j < Y - 1; j++){
@@ -111,12 +110,12 @@ for (int round = 0; round < num_rounds; round++) {
         }
 
         // Boundary conditions
-        #pragma omp parallel for simd schedule(static, chunk_size_avx)
+        #pragma omp parallel for simd schedule(static, chunk_size)
         for (int i = 0; i < X; i++) {
             u[i*X] = 1.;
             u[i*X+(Y - 1)] = 1.;
         }
-        #pragma omp parallel for simd schedule(static, chunk_size_avx)
+        #pragma omp parallel for simd schedule(static, chunk_size)
         for (int i = 0; i < Y; i++){
             u[i] = 1.;
             u[X*(X - 1)+i] = 1.;
