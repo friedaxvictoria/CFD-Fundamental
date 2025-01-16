@@ -33,7 +33,7 @@ int main() {
     const double dt = 0.2 * dx;               // Time step size
 
     int sum_values = 0;
-    int num_rounds = 10;
+    int num_rounds = 1;
 
     int chunk_size = 0;
     
@@ -164,6 +164,8 @@ for (int round = 0; round < num_rounds; round++) {
     for (int i = 0; i < X; i++){
         for (int j = 0; j < Y; j++){
             int idx = i*X+j;
+            std::cout<<u2[i][j]<<std::endl;
+            std::cout<<u[idx]<<std::endl;
             if (u2[i][j] != u[idx]){
                 std::cout<<"not same"<<std::endl;
             }   
