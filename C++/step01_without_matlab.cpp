@@ -66,7 +66,7 @@ int main() {
                 x[i] = (5.0 * i) / (X - 1);
             }
 
-            #pragma omp parallel for schedule(guided)
+            #pragma omp parallel for schedule(static, chunk_size_avx)
             for (int i = 0; i < X; i++) {
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
             }
