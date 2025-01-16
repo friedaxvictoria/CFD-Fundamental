@@ -10,8 +10,8 @@ using namespace std::chrono;
 // Step 5: 2D Linear Convection
 ////////////////////////////////////////////////////////////
 
-const int X = 10;                         // Number of points along X-axis
-const int Y = 10;                         // Number of points along Y-axis
+const int X = 10000;                         // Number of points along X-axis
+const int Y = 10000;                         // Number of points along Y-axis
 //static float x[X], y[X];
 //static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y];
 
@@ -25,7 +25,7 @@ int main() {
     float* un = (float*)malloc(X*Y * sizeof(float));
     float* tmp = (float*)malloc(X*Y * sizeof(float));
 
-    const int T = 10;                         // Total number of time steps
+    const int T = 200;                         // Total number of time steps
 
     const double  c = 1.;                     // Convection coefficient
     const double dx = 2. / (X - 1);           // Step size in the X direction
@@ -88,9 +88,6 @@ for (int round = 0; round < num_rounds; round++) {
 
     // Time-stepping loop
     for (int n = 0; n < T; n++) {
-        //std::copy(&u[0][0], &u[0][0] + X * Y, &un[0][0]);
-        //std::copy(std::begin(u), std::end(u), std::begin(un));
-
         tmp = un;
         un = u;
         u = tmp;
@@ -119,57 +116,6 @@ for (int round = 0; round < num_rounds; round++) {
         for (int i = 0; i < X; i++) u[i*X+(Y - 1)] = 1.;
         #pragma omp parallel for simd schedule(static, chunk_size)
         for (int i = 0; i < Y; i++) u[X*(X - 1)+i] = 1.;
-    }
-
-    std::vector<double> x2(X), y2(Y);
-
-    for (int i = 0; i < X; i++)
-        x2[i] = (2 * i) / (X - 1.0);
-
-    for (int i = 0; i < Y; i++)
-        y2[i] = (2 * i) / (Y - 1.0);
-
-    std::vector<std::vector<double>> nX2(X, std::vector<double>(Y)), nY2(X, std::vector<double>(Y));
-    for (int i = 0; i < X; ++i) {
-        for (int j = 0; j < Y; ++j) {
-            nX2[i][j] = x2[i]; 
-            nY2[i][j] = y2[j]; 
-        }
-    }
-
-    std::vector<std::vector<double>> u2(X, std::vector<double>(Y)), un2(X, std::vector<double>(Y));
-    for (int i = 0; i < X; i++){
-        for (int j = 0; j < Y; j++)
-            u2[i][j] = ((x2[i] >= 0.5 && x2[i] <= 1) && (y2[j] >= 0.5 && y2[j] <= 1)) ? 2.0 : 1.0;        
-    }
-
- 
-    // Time-stepping loop
-    for (int n = 0; n < T; n++) {
-        un2 = u2;
-
-        for (int i = 1; i < X-1; i++) {
-            for (int j = 1; j < Y-1; j++)
-            u2[i][j] = un2[i][j] - c * (un2[i][j] - un2[i-1][j]) * dt / dx - c * (un2[i][j] - un2[i][j-1]) * dt / dx;
-        }
-
-        // Boundary conditions
-        for (int i = 0; i < Y; i++) u2[i][0] = 1.;
-        for (int i = 0; i < X; i++) u2[0][i] = 1.;
-
-        for (int i = 0; i < X; i++) u2[i][Y-1] = 1.;
-        for (int i = 0; i < Y; i++) u2[X-1][i] = 1.;
-    }
-
-    for (int i = 0; i < X; i++){
-        for (int j = 0; j < Y; j++){
-            int idx = i*X+j;
-            std::cout<<u2[i][j]<<std::endl;
-            std::cout<<u[idx]<<std::endl;
-            if (u2[i][j] != u[idx]){
-                std::cout<<"not same"<<std::endl;
-            }   
-        }   
     }
     #else
     // Create spatial grids
