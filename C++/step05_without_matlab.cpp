@@ -81,7 +81,7 @@ for (int round = 0; round < num_rounds; round++) {
     }
 
     // no simd bc of if-else
-    #pragma omp parallel for collapse(2) schedule(guided)
+    #pragma omp parallel for collapse(2) schedule(static, chunk_size)
     for (int i = 0; i < X; i++) {
         for (int j = 0; j < Y; j++){
             int idx = i*X+j;
