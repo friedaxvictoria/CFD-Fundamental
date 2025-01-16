@@ -47,7 +47,7 @@ int main() {
             //bc romeo has avx
             int remainder = chunk_size % (int)(256/32);
 
-            if (remainder != 0 and num_threads != 1)
+            if (remainder != 0)
                 chunk_size_avx = chunk_size -(int)(256/32) + remainder;
             else
                 chunk_size_avx = chunk_size;
