@@ -37,7 +37,6 @@ int main() {
     int num_rounds = 1;
 
     int chunk_size = 0;
-    int chunk_size_avx = 0;
 
     #ifdef PARALLEL
     #pragma omp parallel
@@ -46,14 +45,6 @@ int main() {
         {
             int num_threads = omp_get_num_threads(); // Number of threads
             chunk_size = std::max(1,X / num_threads); // Calculate chunk size
-
-            //bc romeo has avx
-            int remainder = chunk_size % (int)(256/32);
-
-            if (remainder != 0 and num_threads != 1)
-                chunk_size_avx = chunk_size -(int)(256/32) + remainder;
-            else
-                chunk_size_avx = chunk_size;
         }
     }
     #endif
