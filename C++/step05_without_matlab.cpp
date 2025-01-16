@@ -10,9 +10,9 @@ using namespace std::chrono;
 // Step 5: 2D Linear Convection
 ////////////////////////////////////////////////////////////
 
-//test with X=Y=10000, T=250...X=Y=7000, T=400...X=Y=15000, T=125
-const int X = 15000;                         // Number of points along X-axis
-const int Y = 15000;                         // Number of points along Y-axis
+//test with X=Y=10000, T=250...X=Y=7000, T=400...X=Y=15000, T=100
+const int X = 14000;                         // Number of points along X-axis
+const int Y = 14000;                         // Number of points along Y-axis
 //static float x[X], y[X];
 //static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y];
 
@@ -26,7 +26,7 @@ int main() {
     float* un = (float*)malloc(X*Y * sizeof(float));
     float* tmp = (float*)malloc(X*Y * sizeof(float));
 
-    const int T = 75;                         // Total number of time steps
+    const int T = 100;                         // Total number of time steps
 
     const double  c = 1.;                     // Convection coefficient
     const double dx = 2. / (X - 1);           // Step size in the X direction
