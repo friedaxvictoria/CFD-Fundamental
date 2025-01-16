@@ -108,14 +108,21 @@ for (int round = 0; round < num_rounds; round++) {
 
         // Boundary conditions
         #pragma omp parallel for simd schedule(static, chunk_size)
-        for (int i = 0; i < X; i++) u[i*X] = 1.;
+        for (int i = 0; i < X; i++) {
+            u[i*X] = 1.;
+            u[i*X+(Y - 1)] = 1.;
+        }
         #pragma omp parallel for simd schedule(static, chunk_size)
-        for (int i = 0; i < Y; i++) u[i] = 1.;
-
+        for (int i = 0; i < Y; i++){
+            u[i] = 1.;
+            u[X*(X - 1)+i] = 1.;
+        } 
+        
+        /*
         #pragma omp parallel for simd schedule(static, chunk_size)
         for (int i = 0; i < X; i++) u[i*X+(Y - 1)] = 1.;
         #pragma omp parallel for simd schedule(static, chunk_size)
-        for (int i = 0; i < Y; i++) u[X*(X - 1)+i] = 1.;
+        for (int i = 0; i < Y; i++) u[X*(X - 1)+i] = 1.;*/
     }
     #else
     // Create spatial grids
