@@ -46,6 +46,8 @@ int main() {
             int num_threads = omp_get_num_threads(); // Number of threads
             chunk_size = std::max(1,X / num_threads); // Calculate chunk size
 
+            int remainder = chunk_size % (int)(256/32);
+
             if (remainder != 0 and num_threads != 1)
                 chunk_size_avx = chunk_size -(int)(256/32) + remainder;
             else
