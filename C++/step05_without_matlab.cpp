@@ -11,8 +11,8 @@ using namespace std::chrono;
 ////////////////////////////////////////////////////////////
 
 //test with X=Y=10000, T=250...X=Y=7000, T=400...X=Y=14000, T=100
-const int X = 14000;                         // Number of points along X-axis
-const int Y = 14000;                         // Number of points along Y-axis
+const int X = 10000;                         // Number of points along X-axis
+const int Y = 10000;                         // Number of points along Y-axis
 //static float x[X], y[X];
 //static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y];
 
@@ -26,7 +26,7 @@ int main() {
     float* un = (float*)malloc(X*Y * sizeof(float));
     float* tmp = (float*)malloc(X*Y * sizeof(float));
 
-    const int T = 100;                         // Total number of time steps
+    const int T = 250;                         // Total number of time steps
 
     const double  c = 1.;                     // Convection coefficient
     const double dx = 2. / (X - 1);           // Step size in the X direction
@@ -64,15 +64,15 @@ for (int round = 0; round < num_rounds; round++) {
 
     #ifdef PARALLEL
     // Create spatial grids
-    #pragma omp parallel for simd schedule(static,chunk_size)
+    #pragma omp parallel for simd schedule(static,chunk_size_avx)
     for (int i = 0; i < X; i++)
         x[i] = (2 * i) / (X - 1.0);
 
-    #pragma omp parallel for simd schedule(static,chunk_size)
+    #pragma omp parallel for simd schedule(static,chunk_size_avx)
     for (int i = 0; i < Y; i++)
         y[i] = (2 * i) / (Y - 1.0);
 
-    #pragma omp parallel for schedule(static,chunk_size)
+    #pragma omp parallel for schedule(static,chunk_size_avx)
     for (int i = 0; i < X; ++i) {
         #pragma omp simd
         for (int j = 0; j < Y; ++j) {
@@ -97,12 +97,12 @@ for (int round = 0; round < num_rounds; round++) {
         un = u;
         u = tmp;
 
-        #pragma omp parallel for simd schedule(static,chunk_size)
+        #pragma omp parallel for simd schedule(static,chunk_size_avx)
         for (int i = 0; i < X; i++) u[i*X] = un[i*X];
-        #pragma omp parallel for simd schedule(static,chunk_size)
+        #pragma omp parallel for simd schedule(static,chunk_size_avx)
         for (int i = 0; i < Y; i++) u[i] = un[i*X];
 
-        #pragma omp parallel for schedule(static,chunk_size)
+        #pragma omp parallel for schedule(static,chunk_size_avx)
         for (int i = 1; i < X - 1; i++) {
             #pragma omp simd
             for (int j = 1; j < Y - 1; j++){
@@ -112,12 +112,12 @@ for (int round = 0; round < num_rounds; round++) {
         }
 
         // Boundary conditions
-        #pragma omp parallel for simd schedule(static,chunk_size)
+        #pragma omp parallel for simd schedule(static,chunk_size_avx)
         for (int i = 0; i < X; i++) {
             u[i*X] = 1.;
             u[i*X+(Y - 1)] = 1.;
         }
-        #pragma omp parallel for simd schedule(static,chunk_size)
+        #pragma omp parallel for simd schedule(static,chunk_size_avx)
         for (int i = 0; i < Y; i++){
             u[i] = 1.;
             u[X*(X - 1)+i] = 1.;
