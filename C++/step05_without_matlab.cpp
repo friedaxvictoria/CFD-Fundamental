@@ -26,7 +26,7 @@ int main() {
     float* un = (float*)malloc(X*Y * sizeof(float));
     float* tmp = (float*)malloc(X*Y * sizeof(float));
 
-    const int T = 200;                         // Total number of time steps
+    const int T = 250;                         // Total number of time steps
 
     const double  c = 1.;                     // Convection coefficient
     const double dx = 2. / (X - 1);           // Step size in the X direction
@@ -138,7 +138,6 @@ for (int round = 0; round < num_rounds; round++) {
         }
     }
 
-    // no simd bc of i-else
     for (int i = 0; i < X; i++) {
         for (int j = 0; j < Y; j++){
             int idx = i*X+j;
@@ -164,11 +163,14 @@ for (int round = 0; round < num_rounds; round++) {
         }
 
         // Boundary conditions
-        for (int i = 0; i < X; i++) u[i*X] = 1.;
-        for (int i = 0; i < Y; i++) u[i] = 1.;
-
-        for (int i = 0; i < X; i++) u[i*X+(Y - 1)] = 1.;
-        for (int i = 0; i < Y; i++) u[X*(X - 1)+i] = 1.;
+        for (int i = 0; i < X; i++) {
+            u[i*X] = 1.;
+            u[i*X+(Y - 1)] = 1.;
+        }
+        for (int i = 0; i < Y; i++){
+            u[i] = 1.;
+            u[X*(X - 1)+i] = 1.;
+        } 
     }
     #endif
     auto stop = high_resolution_clock::now();
