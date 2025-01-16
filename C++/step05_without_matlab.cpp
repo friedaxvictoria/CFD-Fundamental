@@ -10,7 +10,7 @@ using namespace std::chrono;
 // Step 5: 2D Linear Convection
 ////////////////////////////////////////////////////////////
 
-//test with X=Y=10000, T=250...X=Y=7000, T=400...X=Y=15000, T=100
+//test with X=Y=10000, T=250...X=Y=7000, T=400...X=Y=14000, T=100
 const int X = 14000;                         // Number of points along X-axis
 const int Y = 14000;                         // Number of points along Y-axis
 //static float x[X], y[X];
