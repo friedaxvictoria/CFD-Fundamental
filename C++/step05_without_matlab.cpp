@@ -83,7 +83,7 @@ for (int round = 0; round < num_rounds; round++) {
     #pragma omp parallel for collapse(2) schedule(guided)
     for (int i = 0; i < X; i++) {
         for (int j = 0; j < Y; j++){
-            int index = i*X+j;
+            int idx = i*X+j;
             u[idx] = ((x[i] >= 0.5 && x[i] <= 1) && (y[j] >= 0.5 && y[j] <= 1)) ? 2.0 : 1.0;
         }
     }
@@ -107,7 +107,7 @@ for (int round = 0; round < num_rounds; round++) {
         for (int i = 1; i < X - 1; i++) {
             #pragma omp simd
             for (int j = 1; j < Y - 1; j++){
-                int index = i*X+j;
+                int idx = i*X+j;
                 u[idx] = un[idx] - c * (un[idx] - un[(i-1)*X+j]) * dt / dx - c * (un[idx] - un[idx-1]) * dt / dx;
             }
         }
