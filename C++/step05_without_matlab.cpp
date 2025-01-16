@@ -36,6 +36,7 @@ int main() {
     int num_rounds = 1;
 
     int chunk_size = 0;
+    int chunk_size_avx = 0;
     
     #ifdef PARALLEL
     #pragma omp parallel
