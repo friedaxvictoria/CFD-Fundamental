@@ -47,7 +47,7 @@ int main() {
             //bc romeo has avx
             int remainder = chunk_size % (int)(256/32);
 
-            if (remainder != 0)
+            if (remainder != 0 and num_threads != 1)
                 chunk_size_avx = chunk_size -(int)(256/32) + remainder;
             else
                 chunk_size_avx = chunk_size;
@@ -61,12 +61,12 @@ int main() {
         auto start = high_resolution_clock::now();
 
             #ifdef PARALLEL
-            #pragma omp parallel for simd schedule(static, chunk_size_avx)
+            #pragma omp parallel for simd schedule(static, chunk_size)
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
             }
 
-            #pragma omp parallel for schedule(static, chunk_size_avx)
+            #pragma omp parallel for schedule(guided)
             for (int i = 0; i < X; i++) {
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
             }
@@ -76,7 +76,7 @@ int main() {
                 un = u;
                 u = tmp;
                 u[0] = un[0];
-                #pragma omp parallel for simd schedule(static, chunk_size_avx)
+                #pragma omp parallel for simd schedule(static, chunk_size)
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
