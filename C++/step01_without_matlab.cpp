@@ -11,12 +11,12 @@ using namespace std::chrono;
 // Step 1: 1D Linear Convection
 ////////////////////////////////////////////////////////////
 //test with X=800'000'000, T=50...X=400'000'000, T=100...X=200'000'000, T=200
-const int X = 10;                    // Number of spatial points
+const int X = 800'000'000;                    // Number of spatial points
 
 //static float x[X], u[X], un[X];
 int main() {
     // Simulation parameters
-    const int T = 10;                    // Number of time steps
+    const int T = 50;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
     const float dx = 2.0 / (X - 1);     // Spatial step size
@@ -74,42 +74,22 @@ int main() {
                 }
             }
 
-            std::vector<double> x2(X), u2(X), un2(X);
-
-            for (int i = 0; i < X; i++) {
-                x2[i] = (5.0 * i) / (X - 1);
-                u2[i] = (x2[i] >= 0.5 && x2[i] <= 1) ? 2 : 1;
-            }
-
-            // Time-stepping loop
-            for (int n = 0; n < T; n++) {
-                un2 = u2;
-
-                for (int i = 1; i < X; i++) {
-                    u2[i] = un2[i] - c * (un2[i] - un2[i-1]) * dt / dx;
-                }
-            }
-
-
-            
-            for (int i = 0; i < X; i++) {
-                std::cout << u[i] << std::endl;
-                std::cout << u2[i] << std::endl;
-                if (u[i] != u2[i])
-                    std::cout << "u is unequal" << std::endl;
-            }
             #else
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
+            }
+
+            for (int i = 0; i < X; i++) {
                 u[i] = (x[i] >= 0.5 && x[i] <= 1) ? 2 : 1;
             }
+
+            u[0] = un[0];
             for (int n = 0; n < T; n++) {
                 //std::copy(std::begin(u), std::end(u), std::begin(un));
                 //std::copy(u, u + X, un);
                 tmp = un;
                 un = u;
                 u = tmp;
-                u[0] = un[0];
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }
