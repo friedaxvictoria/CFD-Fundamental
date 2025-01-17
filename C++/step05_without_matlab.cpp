@@ -102,6 +102,7 @@ for (int round = 0; round < num_rounds; round++) {
             }
         }
     }
+    /*
     // Boundary conditions
     #pragma omp parallel for simd schedule(static,chunk_size)
     for (int i = 0; i < X; i++) {
@@ -112,7 +113,7 @@ for (int round = 0; round < num_rounds; round++) {
     for (int i = 0; i < Y; i++){
         u[i] = 1.;
         u[X*(X - 1)+i] = 1.;
-    } 
+    } */
 
 
         std::vector<double> x2(X), y2(Y);
