@@ -133,7 +133,7 @@ for (int round = 0; round < num_rounds; round++) {
         }
     }
 
-    std::vector<std::vector<double>> u(X, std::vector<double>(Y)), un(X, std::vector<double>(Y));
+    std::vector<std::vector<double>> u2(X, std::vector<double>(Y)), un2(X, std::vector<double>(Y));
     for (int i = 0; i < X; i++){
         for (int j = 0; j < Y; j++)
             u2[i][j] = ((x2[i] >= 0.5 && x2[i] <= 1) && (y2[j] >= 0.5 && y2[j] <= 1)) ? 2.0 : 1.0;        
@@ -142,7 +142,7 @@ for (int round = 0; round < num_rounds; round++) {
  
     // Time-stepping loop
     for (int n = 0; n < T; n++) {
-        un = u;
+        un2 = u2;
 
         for (int i = 1; i < X-1; i++) {
             for (int j = 1; j < Y-1; j++)
