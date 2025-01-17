@@ -88,12 +88,12 @@ for (int round = 0; round < num_rounds; round++) {
         un = u;
         u = tmp;
 
-        /*
+        
         #pragma omp parallel for simd schedule(static,chunk_size)
         for (int i = 0; i < X; i++) u[i*X] = un[i*X];
         #pragma omp parallel for simd schedule(static,chunk_size)
         for (int i = 0; i < Y; i++) u[i] = un[i*X];
-        */
+        
 
         #pragma omp parallel for schedule(static,chunk_size)
         for (int i = 1; i < X - 1; i++) {
