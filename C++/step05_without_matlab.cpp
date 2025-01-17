@@ -11,8 +11,8 @@ using namespace std::chrono;
 ////////////////////////////////////////////////////////////
 
 //test with X=Y=10000, T=200...X=Y=7000, T=400...X=Y=14000, T=100
-const int X = 10000;                         // Number of points along X-axis
-const int Y = 10000;                         // Number of points along Y-axis
+const int X = 100000;                         // Number of points along X-axis
+const int Y = 100000;                         // Number of points along Y-axis
 //static float x[X], y[X];
 //static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y];
 
@@ -26,7 +26,7 @@ int main() {
     float* un = (float*)malloc(X*Y * sizeof(float));
     float* tmp = (float*)malloc(X*Y * sizeof(float));
 
-    const int T = 200;                         // Total number of time steps
+    const int T = 20;                         // Total number of time steps
 
     const double  c = 1.;                     // Convection coefficient
     const double dx = 2. / (X - 1);           // Step size in the X direction
