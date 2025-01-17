@@ -26,7 +26,7 @@ int main() {
     float* un = (float*)malloc(X*Y * sizeof(float));
     float* tmp = (float*)malloc(X*Y * sizeof(float));
 
-    const int T = 10;                         // Total number of time steps
+    const int T = 100;                         // Total number of time steps
 
     const double  c = 1.;                     // Convection coefficient
     const double dx = 2. / (X - 1);           // Step size in the X direction
@@ -82,18 +82,16 @@ for (int round = 0; round < num_rounds; round++) {
         }
     }
 
+    #pragma omp parallel for simd schedule(static,chunk_size)
+    for (int i = 0; i < X; i++) un[i*X] = u[i*X];
+    #pragma omp parallel for simd schedule(static,chunk_size)
+    for (int i = 0; i < Y; i++) un[i] = u[i*X];
+
     // Time-stepping loop
     for (int n = 0; n < T; n++) {
         tmp = un;
         un = u;
         u = tmp;
-
-        
-        #pragma omp parallel for simd schedule(static,chunk_size)
-        for (int i = 0; i < X; i++) u[i*X] = un[i*X];
-        #pragma omp parallel for simd schedule(static,chunk_size)
-        for (int i = 0; i < Y; i++) u[i] = un[i*X];
-        
 
         #pragma omp parallel for schedule(static,chunk_size)
         for (int i = 1; i < X - 1; i++) {
