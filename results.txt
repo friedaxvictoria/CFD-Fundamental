@@ -28,3 +28,13 @@ sequential:122502709
 16 threads:6797488
 32 threads:3483775
 64 threads:1973053
+
+X=Y=5000, T=700
+sequential:121776551
+1 thread:99304308
+2 threads:49756351
+4 threads:24838491
+8 threads:12478835
+16 threads:6439267
+32 threads:3412724
+64 threads:1876606
