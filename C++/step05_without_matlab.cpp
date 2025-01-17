@@ -11,8 +11,8 @@ using namespace std::chrono;
 ////////////////////////////////////////////////////////////
 
 //test with X=Y=10000, T=200...X=Y=7000, T=400...X=Y=14000, T=100
-const int X = 50000;                         // Number of points along X-axis
-const int Y = 50000;                         // Number of points along Y-axis
+const int X = 20000;                         // Number of points along X-axis
+const int Y = 20000;                         // Number of points along Y-axis
 //static float x[X], y[X];
 //static float nX[X][Y], nY[X][Y], u[X][Y], un[X][Y];
 
