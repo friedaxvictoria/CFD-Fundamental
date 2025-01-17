@@ -26,7 +26,7 @@ int main() {
     float* un = (float*)malloc(X*Y * sizeof(float));
     float* tmp = (float*)malloc(X*Y * sizeof(float));
 
-    const int T = 250;                         // Total number of time steps
+    const int T = 200;                         // Total number of time steps
 
     const double  c = 1.;                     // Convection coefficient
     const double dx = 2. / (X - 1);           // Step size in the X direction
@@ -34,7 +34,7 @@ int main() {
     const double dt = 0.2 * dx;               // Time step size
 
     int sum_values = 0;
-    int num_rounds = 1;
+    int num_rounds = 10;
 
     int chunk_size = 0;
 
