@@ -158,8 +158,9 @@ for (int round = 0; round < num_rounds; round++) {
     }
     for (int i = 0; i < X; i++){
         for (int j = 0; j < Y; j++){
-            std::cout<<u2[i][j]<<std::endl;    
-            std::cout<<u[i][j]<<std::endl; 
+            std::cout<<u2[i][j]<<std::endl;  
+            int idx = i*X+j;  
+            std::cout<<u[idx]<<std::endl; 
         }           
     }
     #else
