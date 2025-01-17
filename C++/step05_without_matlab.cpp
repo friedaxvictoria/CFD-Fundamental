@@ -157,9 +157,10 @@ for (int round = 0; round < num_rounds; round++) {
         for (int i = 0; i < Y; i++) u2[X-1][i] = 1.;
     }
     for (int i = 0; i < X; i++){
-        for (int j = 0; j < Y; j++)
+        for (int j = 0; j < Y; j++){
             std::cout<<u2[i][j]<<std::endl;    
-            std::cout<<u[i][j]<<std::endl;            
+            std::cout<<u[i][j]<<std::endl; 
+        }           
     }
     #else
     // Create spatial grids
