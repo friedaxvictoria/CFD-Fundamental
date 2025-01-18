@@ -2,11 +2,11 @@ step 1: (X = 800'000'000, T = 50)
 sequential:128540391
 1 thread:139254616
 2 threads:69988647
-4 threads:38834863
-8 threads:27341867
-16 threads:7323251
-32 threads:4103131
-64 threads:2228161
+4 threads:35279621
+8 threads:17770165
+16 threads:8896715
+32 threads:4681993
+64 threads:2647783
 
 step 5:
 X=Y=10000, T=200

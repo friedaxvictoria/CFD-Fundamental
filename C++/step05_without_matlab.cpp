@@ -44,7 +44,7 @@ int main() {
         #pragma omp single
         {
             int num_threads = omp_get_num_threads(); // Number of threads
-            chunk_size = std::max(1,X / num_threads); // Calculate chunk size
+            chunk_size = std::max(8,X / num_threads); // Calculate chunk size
         }
     }
     #endif
