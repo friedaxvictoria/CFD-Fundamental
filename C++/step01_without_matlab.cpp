@@ -41,7 +41,7 @@ int main() {
         #pragma omp single
         {
             int num_threads = omp_get_num_threads(); // Number of threads
-            chunk_size = std::max(1,X / num_threads); // Calculate chunk size
+            chunk_size = std::max(8,X / num_threads); // Calculate chunk size
         }
     }
     #endif
@@ -52,7 +52,7 @@ int main() {
         auto start = high_resolution_clock::now();
 
             #ifdef PARALLEL
-            #pragma omp parallel for schedule(static, chunk_size)
+            #pragma omp parallel for simd schedule(static, chunk_size)
             for (int i = 0; i < X; i++) {
                 x[i] = (5.0 * i) / (X - 1);
             }
@@ -68,7 +68,7 @@ int main() {
                 un = u;
                 u = tmp;
                 
-                #pragma omp parallel for schedule(static, chunk_size)
+                #pragma omp parallel for simd schedule(static, chunk_size)
                 for (int i = 1; i < X; i++) {
                     u[i] = un[i] - c * (un[i] - un[i - 1]) * dt / dx;
                 }

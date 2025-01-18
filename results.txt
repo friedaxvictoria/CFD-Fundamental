@@ -1,5 +1,5 @@
 step 1: (X = 800'000'000, T = 50)
-sequential:112848167
+sequential:128540391
 1 thread:139254616
 2 threads:69988647
 4 threads:38834863
