@@ -11,12 +11,12 @@ using namespace std::chrono;
 // Step 1: 1D Linear Convection
 ////////////////////////////////////////////////////////////
 //test with X=800'000'000, T=50...X=400'000'000, T=100...X=200'000'000, T=200
-const int X = 1'000;                    // Number of spatial points
+const int X = 200'000'000;                    // Number of spatial points
 
 //static float x[X], u[X], un[X];
 int main() {
     // Simulation parameters
-    const int T = 50'000'000;                    // Number of time steps
+    const int T = 200;                    // Number of time steps
     const int c = 1;                     // Wave speed
 
     const float dx = 2.0 / (X - 1);     // Spatial step size
