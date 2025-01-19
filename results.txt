@@ -18,15 +18,15 @@ sequential:124067411
 32 threads:4321630
 64 threads:2356840
 
-step 1: (X = 1'000, T = 50'000'000)
-sequential:143992826
-1 thread:182866300
-2 threads:155908144
-4 threads:33673306
-8 threads:16868976
-16 threads:8521820
-32 threads:4321630
-64 threads:2356840
+step 1: (X = 200'000'000, T = 200)
+sequential:123161304
+1 thread:135343522
+2 threads:67718575
+4 threads:34111517
+8 threads:17216383
+16 threads:8613266
+32 threads:4583105
+64 threads:2566240
 
 step 5:
 X=Y=10000, T=200

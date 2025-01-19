@@ -55,17 +55,16 @@ for (int round = 0; round < num_rounds; round++) {
 
     #ifdef PARALLEL
     // Create spatial grids
-    #pragma omp parallel for simd schedule(static,chunk_size)
+    #pragma omp parallel for schedule(static,chunk_size)
     for (int i = 0; i < X; i++)
         x[i] = (2 * i) / (X - 1.0);
 
-    #pragma omp parallel for simd schedule(static,chunk_size)
+    #pragma omp parallel for schedule(static,chunk_size)
     for (int i = 0; i < Y; i++)
         y[i] = (2 * i) / (Y - 1.0);
 
     #pragma omp parallel for schedule(static,chunk_size)
     for (int i = 0; i < X; ++i) {
-        #pragma omp simd
         for (int j = 0; j < Y; ++j) {
             int idx = i*X+j;
             nX[idx] = x[i];
@@ -82,9 +81,9 @@ for (int round = 0; round < num_rounds; round++) {
         }
     }
 
-    #pragma omp parallel for simd schedule(static,chunk_size)
+    #pragma omp parallel for schedule(static,chunk_size)
     for (int i = 0; i < X; i++) un[i*X] = u[i*X];
-    #pragma omp parallel for simd schedule(static,chunk_size)
+    #pragma omp parallel for schedule(static,chunk_size)
     for (int i = 0; i < Y; i++) un[i] = u[i*X];
 
     // Time-stepping loop
@@ -95,7 +94,6 @@ for (int round = 0; round < num_rounds; round++) {
 
         #pragma omp parallel for schedule(static,chunk_size)
         for (int i = 1; i < X - 1; i++) {
-            #pragma omp simd
             for (int j = 1; j < Y - 1; j++){
                 int idx = i*X+j;
                 u[idx] = un[idx] - c * (un[idx] - un[(i-1)*X+j]) * dt / dx - c * (un[idx] - un[idx-1]) * dt / dx;
